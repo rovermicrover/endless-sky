@@ -1,0 +1,258 @@
+# Copyright (c) 2014-2015 by Michael Zahniser
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+mission "Ancient Text: 1"
+	name "Deciphering The Ancient Text"
+	description "While browsing at an old book story on <planet> you came accross an eery old book written in a script you have never seen before. Its cover is an old shell, and its written on a leather paper you have never seen before. Maybe Albert Foster on <destination> has some insight into this book?"
+	source
+		government "Republic" "Free Worlds" "Syndicate" "Independent" "Neutral"
+		near "Sol" 100
+		attributes spaceport
+	destination "Vinci"
+	to offer
+		has "Sheragi Archaeology: Epilogue: done"
+		has "Visit Wanderers Again: offered"
+		has "main plot completed"
+		random < 4
+	on offer
+		conversation
+			`You find a very old book, its creepy...`
+			choice
+				`	You buy the book.`
+				`	You decide to not buy the fook`
+					decline
+			`	You decide to take the book to Albert Foster on <destination>.`
+
+
+
+mission "Ancient Text: 2"
+	landing
+	name "Deciphering The Ancient Text"
+	description "While browsing at an old book story you came accross an eery old book written in a script you have never seen before. Maybe the Hai Eruk on <destination> has some insight into this book?"
+	source "Vinci"
+	destination "Greenwater"
+	to offer
+		has "Ancient Text: 1: done"
+	on offer
+		conversation
+			`"[Science talk] Will take a sample and try to figure out what the materials are. In the mean time I would take the book to a linguist."`
+
+
+
+mission "Ancient Text: 3"
+	landing
+	name "Deciphering The Ancient Text"
+	description "While visting Hai Eruk on <destination> about the book the unfettered attacked. Now you must fight them off."
+	source "Greenwater"
+	to offer
+		has "Ancient Text: 2: done"
+	on offer
+		conversation
+			`"[Science talk] will try and desifer the characters. In the mean time some pirates are here please help."`
+			launch
+	npc kill
+		government "Pirate"
+		personality heroic unconstrained waiting nemesis
+		fleet "Marauder fleet X" 2
+	on complete
+		event "ancient text: material research complete" 60
+		conversation
+			`"They really wanted that book. Give me time to try and figure out the book."`
+
+
+
+mission "Ancient Text: 4"
+	landing
+	name "Deciphering The Ancient Text"
+	source
+		government "Republic" "Free Worlds" "Syndicate" "Independent" "Neutral"
+		near "Sol" 100
+		attributes spaceport
+	destination "Vinci"
+	to offer
+		has "ancient text: material research complete"
+	on offer
+		conversation
+			`You get a message from Albert Foster that he has info on the materials that make up the book.`
+
+
+
+event "ancient text: linguist research complete"
+
+
+
+mission "Ancient Text: 5"
+	landing
+	name "Deciphering The Ancient Text"
+	description "While browsing at an old book story you came accross an eery old book written in a script you have never seen before. Maybe the Remnant Dusk on <destination> has some insight into this book?"
+	source "Vinci"
+	to offer
+		has "Ancient Text: 4: done"
+	on offer
+		event "ancient text: linguist research complete" 60
+		conversation
+			`"[Science talk] the outer part of the book is actualy from a Sheragi shell! I don't know what the two types of pages are made from though."`
+				decline
+
+
+
+mission "Ancient Text: 6"
+	landing
+	name "Deciphering The Ancient Text"
+	description "Hai Eruk on <destination> has info on the content of the book."
+	source
+		government "hai"
+		near "Hai-home" 10
+		attributes spaceport
+	destination "Greenwater"
+	to offer
+		has "event: ancient text: linguist research complete"
+	on offer
+		conversation
+			`You get a message from Hai Eruk that he has info on the content of the book.`
+
+
+
+mission "Ancient Text: 7"
+	landing
+	name "Deciphering The Ancient Text"
+	description "Hai Eruk on <planet> has arraged for you to meet with a Quarg on Alta Hai you an help with the details of the book."
+	source "Greenwater"
+	destination "Darkcloak"
+	to offer
+		has "Ancient Text: 6: done"
+	on offer
+		conversation
+			`"We have figured out that half the book is written in an early Hai dialect."`
+			`	"We were tipped off by the leather pages which are made from an extienict create from Frostmark."`
+			`	"The other half is actually written in Sheragi!"`
+			`	"But beforew we can make a full scan of the book and start trying to translate while you where gone another Unfettered Human fleet showed up and raided our lab. A Unfettered Hai warlord was with them. If you want the book back you will need to track him down."`
+	on complete
+		conversation
+			`"So you want the book back? Fat chance."`
+			`	"I challenge you to a duel. [BATTLE MUSIC]."
+			`	"Meet me at the space port with just one ship."
+
+
+
+mission "Ancient Text: 8"
+	name "Deciphering The Ancient Text"
+	description "While visting the Quarg on <destination> about the book the unfettered and alpha attacked. Now you must fight them off."
+	source "Darkcloak"
+	deadline 2
+	to offer
+		has "Ancient Text: 7: done"
+	on offer
+		conversation
+			branch fight
+				"total ships" == 1
+			`You found the Unfettered warlord that has the book, but he would only accept a duel. You need to park all your ships and land again.`
+				defer
+			label fight
+			action
+				"old unfettered rep" = "reputation: Hai (Unfettered)"
+				"reputation: Hai (Unfettered)" = 1
+			`"LET'S BRAWL [BATTLE MUSIC] DONT WORRY MY BOYS AND GIRLS WILL NOT INTERRUPT US WIN TODAY OR LOSE FOREVER"`
+				launch
+	to fail
+		"total ships" > 1
+	on fail
+		dialog "You will need to restart the mission in order to progress further with the Deciphering The Ancient Text."
+		"reputation: Hai (Unfettered)" = "old unfettered rep"
+		clear "old unfettered rep"
+	npc save disable
+		government "Hai (Unfettered Challenger)"
+		personality disables staying heroic target marked nemesis
+		fleet "Shield Beetle (Six Ion)"
+		dialog "The unfettered Hai warlord has been defeated return to <planet> to claim the book."
+	on complete
+		"reputation: Hai (Unfettered)" = "old unfettered rep"
+		clear "old unfettered rep"
+
+event "ancient text: shard fabricator intel translation progress"
+
+event "ancient text: shard fabricator intel translation complete"
+	planet "Greenwater"
+		outfitter "Hai Shard Fabricator"
+
+event "ancient text: black diamond intel translation progress"
+
+event "ancient text: black diamond intel translation complete"
+	planet "Greenwater"
+		shipyard "Hai Black Diamond"
+
+
+
+mission "Ancient Text: 9"
+	landing
+	name "Deciphering The Ancient Text"
+	description "Return to Hai Eruk on <destination> with the book."
+	source "Darkcloak"
+	destination "Greenwater"
+	to offer
+		has "Ancient Text: 8: done"
+	on offer
+		conversation
+			`"You have won and I am a Hai of my word so here the book is. We already have its contents anyway."`
+	on complete
+		event ""ancient text: shard fabricator intel translation progress" 90
+		conversation
+			`"We will make a full scan of the book right away."`
+			`"We will let you know when we have made further progress translating the books content."`
+
+
+
+mission "Ancient Text: 10"
+	landing
+	name "Deciphering The Ancient Text"
+	description "Return to Hai Eruk on <destination> to find out what they learned from the book."
+	source
+		government "hai"
+		near "Hai-home" 10
+		attributes spaceport
+	destination "Greenwater"
+	to offer
+		has "event: ancient text: shard fabricator intel translation progress"
+		has "event: outfitter on greenwater"
+	on offer
+		conversation
+			`You get a message from Hai Eruk that they have been able to figure out that the book includes plans for the Shard Fabricator along with planes for a prototype hand held version. Return to Greenwater to learn more.`
+	on enter "Fah Soom"
+		event "ancient text: shard fabricator intel translation complete"
+	on complete
+		event "ancient text: black diamond intel translation progress" 90
+		conversation
+			`"We were able to figure out that the book contained stolen Sheragi plans for the Shard Fabricator and plans for a prototype hand held version. With the help of Turner Incorporated you can now buy them here."`
+
+
+
+mission "Ancient Text: 11"
+	landing
+	name "Deciphering The Ancient Text"
+	description "Return to Hai Eruk on <destination> to find out what they learned from the book."
+	source
+		government "hai"
+		near "Hai-home" 10
+		attributes spaceport
+	destination "Greenwater"
+	to offer
+		has "event: ancient text: black diamond intel translation progress"
+		has "event: shipyard on greenwater"
+	on offer
+		conversation
+			`You get a message from Hai Eruk that they have been able to figure out that the book includes plans for the chassey of the Sheragi fighter and have managed to reproduce them. Return to Greenwater to learn more.`
+	on enter "Fah Soom"
+		event "ancient text: black diamond intel translation complete"
+	on complete
+		conversation
+			`"We were able to figure out that the book contained stolen Sheragi plans for the chassey of the Black Diamond fighter. With the help of Turner Incorporated you can now buy them here."`

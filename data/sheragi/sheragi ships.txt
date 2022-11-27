@@ -222,3 +222,25 @@ ship "Black Diamond"
 	description "The Sheragi, being too large to effectively pilot ships this small, invested heavily in the development of autonomous fighters. The hardware that controls this isn't much more complex than the combat drones in human space, but it is bigger, and the lack of life support systems and amenities for a pilot allows it to carry extra outfitting space."
 	description "	The fighter also comes equipped with a powerful hull repair system to aid in its survival. This system doesn't work while the fighter is under fire, though, requiring the fighter to have not taken damage for a short while before activating."
 	description "	Fighters do not come equipped with a hyperdrive. You cannot carry a fighter unless you have a ship in your fleet with a fighter bay."
+
+ship "Black Diamond", "Black Diamond (Hai)"
+	sprite "ship/blackdiamond"
+	thumbnail "thumbnail/blackdiamond"
+	swizzle 9
+	outfits
+		"Pulse Cannon" 2
+		"Railgun"
+		"Railgun Slug" 1000
+		
+		"Hai Corundum Regenerator"
+		"Hai Gorge Battery"
+		"Pubble Core"
+		
+		`"Basrem" Atomic Thruster`
+		`"Benga" Atomic Steering`
+	gun 0 -39.5 "Railgun"
+	gun 22 -7.5 "Pulse Cannon"
+	gun -22 -7.5 "Pulse Cannon
+
+shipyard "Hai Black Diamond"
+	"Black Diamond (Hai)"
