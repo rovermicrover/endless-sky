@@ -13,7 +13,7 @@
 
 mission "Ancient Text: 1"
 	name "Deciphering The Ancient Text"
-	description "While browsing at an old book story on <planet> you came accross an eery old book written in a script you have never seen before. Its cover is an old shell, and its written on a leather paper you have never seen before. Maybe Albert Foster on <destination> has some insight into this book?"
+	description "While browsing at an old book story on <planet> you came across an eery old book written in a script you have never seen before. Its cover is an old shell, and its written on a leather paper you have never seen before. Maybe Albert Foster on <destination> has some insight into this book?"
 	source
 		government "Republic" "Free Worlds" "Syndicate" "Independent" "Neutral"
 		near "Sol" 100
@@ -30,7 +30,7 @@ mission "Ancient Text: 1"
 			choice
 				`	You buy the book.`
 					goto end
-				`	You decide to not buy the fook`
+				`	You decide to not buy the book`
 					decline
 			label end
 			`	You decide to take the book to Albert Foster on <destination>.`
@@ -41,7 +41,7 @@ mission "Ancient Text: 1"
 mission "Ancient Text: 2"
 	landing
 	name "Deciphering The Ancient Text"
-	description "While browsing at an old book story you came accross an eery old book written in a script you have never seen before. Maybe the Hai Eruk on <destination> has some insight into this book?"
+	description "While browsing at an old book story you came across an eery old book written in a script you have never seen before. Maybe the Hai Eruk on <destination> has some insight into this book?"
 	source "Vinci"
 	destination "Greenwater"
 	to offer
@@ -66,7 +66,7 @@ mission "Ancient Text: 3"
 		has "Ancient Text: 2: done"
 	on offer
 		conversation
-			`"[Science talk] will try and desifer the characters. In the mean time some pirates are here please help."`
+			`"[Science talk] will try and decipher the characters. In the mean time some pirates are here please help."`
 				launch
 	npc disable
 		government "Pirate"
@@ -104,14 +104,14 @@ event "ancient text: linguist research complete"
 mission "Ancient Text: 5"
 	landing
 	name "Deciphering The Ancient Text"
-	description "While browsing at an old book story you came accross an eery old book written in a script you have never seen before. Maybe the Remnant Dusk on <destination> has some insight into this book?"
+	description "While browsing at an old book story you came across an eery old book written in a script you have never seen before. Maybe the Remnant Dusk on <destination> has some insight into this book?"
 	source "Vinci"
 	to offer
 		has "Ancient Text: 4: done"
 	on offer
 		event "ancient text: linguist research complete" 60
 		conversation
-			`"[Science talk] the outer part of the book is actualy from a Sheragi shell! I don't know what the two types of pages are made from though."`
+			`"[Science talk] the outer part of the book is actually from a Sheragi shell! I don't know what the two types of pages are made from though."`
 				decline
 
 
@@ -137,7 +137,7 @@ mission "Ancient Text: 6"
 mission "Ancient Text: 7"
 	landing
 	name "Deciphering The Ancient Text"
-	description "Hai Eruk on <planet> has arraged for you to meet with a Quarg on Alta Hai you an help with the details of the book."
+	description "Hai Eruk on <planet> has arranged for you to meet with a Quarg on Alta Hai you an help with the details of the book."
 	source "Greenwater"
 	destination "Darkcloak"
 	to offer
@@ -145,9 +145,9 @@ mission "Ancient Text: 7"
 	on offer
 		conversation
 			`"We have figured out that half the book is written in an early Hai dialect."`
-			`	"We were tipped off by the leather pages which are made from an extienict create from Frostmark."`
+			`	"We were tipped off by the leather pages which are made from an extinct creature from Frostmark."`
 			`	"The other half is actually written in Sheragi!"`
-			`	"But beforew we can make a full scan of the book and start trying to translate while you where gone another Unfettered Human fleet showed up and raided our lab. A Unfettered Hai warlord was with them. If you want the book back you will need to track him down."`
+			`	"But before we can make a full scan of the book and start trying to translate while you where gone another Unfettered Human fleet showed up and raided our lab. A Unfettered Hai warlord was with them. If you want the book back you will need to track him down."`
 				accept
 	on complete
 		conversation
@@ -159,7 +159,7 @@ mission "Ancient Text: 7"
 
 mission "Ancient Text: 8"
 	name "Deciphering The Ancient Text"
-	description "While visting the Quarg on <destination> about the book the unfettered and alpha attacked. Now you must fight them off."
+	description "While visiting the Hai Eruk on <destination> about the book the unfettered and alpha attacked. Now you must fight them off."
 	source "Darkcloak"
 	deadline 2
 	to offer
@@ -174,7 +174,7 @@ mission "Ancient Text: 8"
 			action
 				"old unfettered rep" = "reputation: Hai (Unfettered)"
 				"reputation: Hai (Unfettered)" = 1
-			`"LET'S BRAWL [BATTLE MUSIC] DONT WORRY MY BOYS AND GIRLS WILL NOT INTERRUPT US WIN TODAY OR LOSE FOREVER"`
+			`"LET'S BRAWL [BATTLE MUSIC] DON'T WORRY MY BOYS AND GIRLS WILL NOT INTERRUPT US WIN TODAY OR LOSE FOREVER"`
 				launch
 	to fail
 		"total ships" > 1
@@ -267,10 +267,10 @@ mission "Ancient Text: 11"
 		has "event: shipyard on greenwater"
 	on offer
 		conversation
-			`You get a message from Hai Eruk that they have been able to figure out that the book includes plans for the chassey of the Sheragi fighter and have managed to reproduce them. Return to Greenwater to learn more.`
+			`You get a message from Hai Eruk that they have been able to figure out that the book includes plans for the hull of the Sheragi fighter and have managed to reproduce them. Return to Greenwater to learn more.`
 				accept
 	on enter "Fah Soom"
 		event "ancient text: black diamond intel translation complete"
 	on complete
 		conversation
-			`"We were able to figure out that the book contained stolen Sheragi plans for the chassey of the Black Diamond fighter. With the help of Turner Incorporated you can now buy them here."`
+			`"We were able to figure out that the book contained stolen Sheragi plans for the hull of the Black Diamond fighter. With the help of Turner Incorporated you can now buy them here."`
