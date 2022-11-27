@@ -60,7 +60,7 @@ event "ancient text: material research complete"
 mission "Ancient Text: 3"
 	landing
 	name "Deciphering The Ancient Text"
-	description "While visting Hai Eruk on <destination> about the book the unfettered attacked. Now you must fight them off."
+	description "While visiting Hai Eruk on <destination> about the book the unfettered attacked. Now you must fight them off."
 	source "Greenwater"
 	to offer
 		has "Ancient Text: 2: done"

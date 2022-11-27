@@ -389,7 +389,7 @@ outfit "Hand Held Shard Fabricator"
 	"operating costs" 150
 	"ramscoop" -0.01
 	"unplunderable" 1
-	description `A replica of the "Hand Held" version of the Sheragi Shard Fabricator, slightly scaled down for existing races. For use as a first strick shock weapon in boarding operations. In order to produce ammo it must be hooked into your ships weapon and fuel system so it takes up weapon capacity. Also because of its size and support equipment it takes up a significat space, and it is also so unwieldy using it as a defensive weapon is dangerous for fear of miss fire and destorying your own ship.`
+	description `A replica of the "Hand Held" version of the Sheragi Shard Fabricator, slightly scaled down for existing races. For use as a first strick shock weapon in boarding operations. In order to produce ammo it must be hooked into your ships weapon and fuel system so it takes up weapon capacity. Also because of its size and support equipment it takes up a significate space, and it is also so unwieldy using it as a defensive weapon is dangerous for fear of miss fire and destroying your own ship.`
 
 outfitter "Hai Shard Fabricator"
 	"Shard Fabricator"
