@@ -68,10 +68,11 @@ mission "Ancient Text: 3"
 		conversation
 			`"[Science talk] will try and desifer the characters. In the mean time some pirates are here please help."`
 				launch
-	npc kill
+	npc disable
 		government "Pirate"
 		personality heroic unconstrained waiting nemesis
 		fleet "Marauder fleet X" 2
+		dialog "The Unfettered Humans have been defeated, return to Greenwater to talk further with Hai Eruk about the book."
 	on complete
 		event "ancient text: material research complete" 60
 		conversation
