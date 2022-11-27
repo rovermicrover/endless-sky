@@ -67,7 +67,7 @@ mission "Ancient Text: 3"
 	on offer
 		conversation
 			`"[Science talk] will try and desifer the characters. In the mean time some pirates are here please help."`
-			launch
+				launch
 	npc kill
 		government "Pirate"
 		personality heroic unconstrained waiting nemesis
