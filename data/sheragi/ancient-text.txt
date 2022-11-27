@@ -192,6 +192,8 @@ mission "Ancient Text: 8"
 		"reputation: Hai (Unfettered)" = "old unfettered rep"
 		clear "old unfettered rep"
 
+
+
 event "ancient text: shard fabricator intel translation progress"
 
 event "ancient text: shard fabricator intel translation complete"
