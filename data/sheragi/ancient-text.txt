@@ -23,15 +23,18 @@ mission "Ancient Text: 1"
 		has "Sheragi Archaeology: Epilogue: done"
 		has "Visit Wanderers Again: offered"
 		has "main plot completed"
-		random < 4
+		random < 50
 	on offer
 		conversation
 			`You find a very old book, its creepy...`
 			choice
 				`	You buy the book.`
+					goto end
 				`	You decide to not buy the fook`
 					decline
+			label end
 			`	You decide to take the book to Albert Foster on <destination>.`
+				accept
 
 
 
@@ -46,6 +49,11 @@ mission "Ancient Text: 2"
 	on offer
 		conversation
 			`"[Science talk] Will take a sample and try to figure out what the materials are. In the mean time I would take the book to a linguist."`
+				accept
+
+
+
+event "ancient text: material research complete"
 
 
 
@@ -84,6 +92,7 @@ mission "Ancient Text: 4"
 	on offer
 		conversation
 			`You get a message from Albert Foster that he has info on the materials that make up the book.`
+				accept
 
 
 
@@ -111,8 +120,8 @@ mission "Ancient Text: 6"
 	name "Deciphering The Ancient Text"
 	description "Hai Eruk on <destination> has info on the content of the book."
 	source
-		government "hai"
-		near "Hai-home" 10
+		government "Hai"
+		near "Ya Hai" 10
 		attributes spaceport
 	destination "Greenwater"
 	to offer
@@ -120,6 +129,7 @@ mission "Ancient Text: 6"
 	on offer
 		conversation
 			`You get a message from Hai Eruk that he has info on the content of the book.`
+				accept
 
 
 
@@ -137,11 +147,12 @@ mission "Ancient Text: 7"
 			`	"We were tipped off by the leather pages which are made from an extienict create from Frostmark."`
 			`	"The other half is actually written in Sheragi!"`
 			`	"But beforew we can make a full scan of the book and start trying to translate while you where gone another Unfettered Human fleet showed up and raided our lab. A Unfettered Hai warlord was with them. If you want the book back you will need to track him down."`
+				accept
 	on complete
 		conversation
 			`"So you want the book back? Fat chance."`
-			`	"I challenge you to a duel. [BATTLE MUSIC]."
-			`	"Meet me at the space port with just one ship."
+			`	"I challenge you to a duel. [BATTLE MUSIC]."`
+			`	"Meet me at the space port with just one ship."`
 
 
 
@@ -171,9 +182,10 @@ mission "Ancient Text: 8"
 		"reputation: Hai (Unfettered)" = "old unfettered rep"
 		clear "old unfettered rep"
 	npc save disable
-		government "Hai (Unfettered Challenger)"
+		# government "Hai (Unfettered Challenger)"
+		government "Hai (Unfettered)"
 		personality disables staying heroic target marked nemesis
-		fleet "Shield Beetle (Six Ion)"
+		ship "Shield Beetle"
 		dialog "The unfettered Hai warlord has been defeated return to <planet> to claim the book."
 	on complete
 		"reputation: Hai (Unfettered)" = "old unfettered rep"
@@ -204,8 +216,9 @@ mission "Ancient Text: 9"
 	on offer
 		conversation
 			`"You have won and I am a Hai of my word so here the book is. We already have its contents anyway."`
+				accept
 	on complete
-		event ""ancient text: shard fabricator intel translation progress" 90
+		event "ancient text: shard fabricator intel translation progress" 90
 		conversation
 			`"We will make a full scan of the book right away."`
 			`"We will let you know when we have made further progress translating the books content."`
@@ -217,8 +230,8 @@ mission "Ancient Text: 10"
 	name "Deciphering The Ancient Text"
 	description "Return to Hai Eruk on <destination> to find out what they learned from the book."
 	source
-		government "hai"
-		near "Hai-home" 10
+		government "Hai"
+		near "Ya Hai" 10
 		attributes spaceport
 	destination "Greenwater"
 	to offer
@@ -227,6 +240,7 @@ mission "Ancient Text: 10"
 	on offer
 		conversation
 			`You get a message from Hai Eruk that they have been able to figure out that the book includes plans for the Shard Fabricator along with planes for a prototype hand held version. Return to Greenwater to learn more.`
+				accept
 	on enter "Fah Soom"
 		event "ancient text: shard fabricator intel translation complete"
 	on complete
@@ -241,8 +255,8 @@ mission "Ancient Text: 11"
 	name "Deciphering The Ancient Text"
 	description "Return to Hai Eruk on <destination> to find out what they learned from the book."
 	source
-		government "hai"
-		near "Hai-home" 10
+		government "Hai"
+		near "Ya Hai" 10
 		attributes spaceport
 	destination "Greenwater"
 	to offer
@@ -251,6 +265,7 @@ mission "Ancient Text: 11"
 	on offer
 		conversation
 			`You get a message from Hai Eruk that they have been able to figure out that the book includes plans for the chassey of the Sheragi fighter and have managed to reproduce them. Return to Greenwater to learn more.`
+				accept
 	on enter "Fah Soom"
 		event "ancient text: black diamond intel translation complete"
 	on complete
