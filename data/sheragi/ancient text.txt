@@ -1,4 +1,4 @@
-# Copyright (c) 2014-2015 by Michael Zahniser
+# Copyright (c) 2022 rovermicrover
 #
 # Endless Sky is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -26,14 +26,62 @@ mission "Ancient Text: 1"
 		random < 50
 	on offer
 		conversation
-			`You find a very old book, its creepy...`
+			`There is some type of hold up at the port, so while you are wait you decide to take a look around the shops near the port.`
+			`	While browsing a strange box in the window of an antique shop catches your eye. The material reminds you of the hull of the Emerald Sword, and while the characters aren't Sheragi they do seem vaguely familiar.`
 			choice
-				`	You buy the book.`
-					goto end
-				`	You decide to not buy the book`
+				`	You decide to try and buy the box.`
+					goto negotiate
+				`	You decide to ignore the box.`
 					decline
+			label negotiate
+			`	As you enter the shop keeper greats you, "Hello my friend, is there something I can help you with?"`
+			`	"Yes I was wondering about that metal box in the front window."`
+			`	"Ah yes a fine piece that one. A strange desperate cloaked merchant from up north sold it to me a few months ago. Whats your interest in it?"`
+			choice
+				`	"I need a new monitor stand and its the perfect size."`
+					goto cheap
+				`	"I recognized the material and some of the characters on the box from my travels, it should be in a museum!"`
+					goto museum
+				`	"Honestly I think I have a buyer for it in another sector."`
+					goto middleman
+
+			label cheap
+			`	"Is that so?" the store own asks deflated.`
+			`	"In that case my friend how about 2000 credits?"`
+			branch "payment cheap"
+				"credits" > 2000
+			goto broke
+			label "payment cheap"
+			payment -2000
+			goto end
+
+			label museum
+			`	"Is that so?" the store own asks ecstatically.`
+			`	"In that case my friend how about 10000000 credits?"`
+			branch "payment museum"
+				"credits" >= 10000000
+			goto broke
+			label "payment museum"
+			payment -10000000
+			goto end
+
+			label middleman
+			`	"Is that so?" the store own asks interested.`
+			`	"In that case my friend how about 1000000 credits?"`
+			branch "payment middleman"
+				"credits" >= 1000000
+			goto broke
+			label "payment middleman"
+			payment -1000000
+			goto end
+			
+			label broke
+			`	"I don't actually have that kind of credits on me at the moment."`
+			`	"To bad for you my friend... I guess the piece isn't for you then." the shop keeper responds miffed.`
+				decline
 			label end
-			`	You decide to take the book to Albert Foster on <destination>.`
+			`	As you hand the shop keeper his credits he smiles and says "Pleasure doing business with you friend."`
+			`	You decide to take the box to Albert Foster on <destination> to see what he can make of the box.`
 				accept
 
 
