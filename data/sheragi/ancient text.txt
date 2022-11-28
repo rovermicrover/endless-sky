@@ -93,9 +93,13 @@ mission "Ancient Text: 2"
 		has "Ancient Text: 1: done"
 	on offer
 		conversation
-			`Albert Foster greets you in his normal enthusiastic manor "Well if it isn't Captain <first>! Don't keep me waiting in suspense "`
-				accept
-
+			`Albert Foster greets you in his normal enthusiastic manor "Well if it isn't Captain <first>!"`
+			branch "emerald sword" "box"
+				has "flagship model: Emerald Sword"
+			label "emerald sword"
+			`	"I see the Emerald Sword is still in one piece. We were right to trust it to you. I hope you have been doing some good with it, so those who flew it before can sleep well."`
+			label box
+			`	"So what brings you here today? I assume its not to exchange pleasantries, your face tells me you have something new for me?"`
 
 
 event "ancient text: material research complete"
