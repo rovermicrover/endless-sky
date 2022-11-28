@@ -52,7 +52,8 @@ mission "Ancient Text: 1"
 				"credits" < 2000
 			action
 				payment -2000
-			goto end
+			`	"Thank you, here is your receipt."`
+				goto end
 
 			label museum
 			`	"Is that so?" the store own asks ecstatically.`
@@ -61,7 +62,8 @@ mission "Ancient Text: 1"
 				"credits" < 10000000
 			action
 				payment -10000000
-			goto end
+			`	"Thank you, here is your receipt."`
+				goto end
 
 			label middleman
 			`	"Is that so?" the store own asks interested.`
@@ -70,7 +72,8 @@ mission "Ancient Text: 1"
 				"credits" < 1000000
 			action
 				payment -1000000
-			goto end
+			`	"Thank you, here is your receipt."`
+				goto end
 			
 			label broke
 			`	"I don't actually have that kind of credits on me at the moment."`
