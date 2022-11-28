@@ -27,7 +27,7 @@ mission "Ancient Text: 1"
 	on offer
 		conversation
 			`There is some type of hold up at the port, so while you are wait you decide to take a look around the shops near the port.`
-			`	While browsing a strange box in the window of an antique shop catches your eye. The material reminds you of the hull of the Emerald Sword, and while the characters aren't Sheragi they do seem vaguely familiar.`
+			`	While browsing a familiar looking red metal cube in the window of an antique shop catches your eye. Unlike the cube unearthed on Zug this cube is larger. It also has some characters on it that you do not recognize, but seem vaguely familiar.`
 			choice
 				`	You decide to try and buy the box.`
 					goto negotiate
@@ -52,7 +52,7 @@ mission "Ancient Text: 1"
 				"credits" < 2000
 			action
 				payment -2000
-				goto end
+			goto end
 
 			label museum
 			`	"Is that so?" the store own asks ecstatically.`
@@ -61,7 +61,7 @@ mission "Ancient Text: 1"
 				"credits" < 10000000
 			action
 				payment -10000000
-				goto end
+			goto end
 
 			label middleman
 			`	"Is that so?" the store own asks interested.`
@@ -70,7 +70,7 @@ mission "Ancient Text: 1"
 				"credits" < 1000000
 			action
 				payment -1000000
-				goto end
+			goto end
 			
 			label broke
 			`	"I don't actually have that kind of credits on me at the moment."`
@@ -97,9 +97,19 @@ mission "Ancient Text: 2"
 			branch "emerald sword" "box"
 				has "flagship model: Emerald Sword"
 			label "emerald sword"
-			`	"I see the Emerald Sword is still in one piece. We were right to trust it to you. I hope you have been doing some good with it, so those who flew it before can sleep well."`
+			`	"I see the Emerald Sword is still in one piece. We were right to trust it to you. I hope you have been doing some good with it, so the souls who flew it before can rest well."`
 			label box
-			`	"So what brings you here today? I assume its not to exchange pleasantries, your face tells me you have something new for me?"`
+			`	"So what brings you here today? I assume its not to exchange pleasantries. Your face tips your hand that you have something new to show me."`
+			`	As you set the box on his desk his eyes light up with excitement.`
+			`	"My I can see why you brought this too me. It looks very similar to the cube from the Zug dig site... but these characters are defiantly not Sheragi as far as I have seen."`
+			label "questions one"
+			choice
+				`	"Do you have any idea to the origin of the characters?"`
+					goto "characters origin"
+				`	"Any idea on how to get it open?"`
+					goto "characters origin"
+			label "characters origin"
+			`	"I will have to do some more research but at first glance it does not look"`
 
 
 event "ancient text: material research complete"
