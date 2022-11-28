@@ -12,8 +12,8 @@
 # this program. If not, see <https://www.gnu.org/licenses/>.
 
 mission "Ancient Text: 1"
-	name "Deciphering The Ancient Text"
-	description "While browsing at an old book story on <planet> you came across an eery old book written in a script you have never seen before. Its cover is an old shell, and its written on a leather paper you have never seen before. Maybe Albert Foster on <destination> has some insight into this book?"
+	name "Deciphering The Ancient Box"
+	description "While browsing a antique store you came across an ancient box that is made in a similar material to the Emerald Sword. It is also covered in characters that seem vaguely familiar. Maybe Albert Foster on <destination> has some insight into this box?"
 	source
 		government "Republic" "Free Worlds" "Syndicate" "Independent" "Neutral"
 		near "Sol" 100
@@ -48,31 +48,28 @@ mission "Ancient Text: 1"
 			label cheap
 			`	"Is that so?" the store own asks deflated.`
 			`	"In that case my friend how about 2000 credits?"`
-			branch "payment cheap"
-				"credits" > 2000
-			goto broke
-			label "payment cheap"
-			payment -2000
+			branch broke
+				"credits" < 2000
+			action
+				payment -2000
 			goto end
 
 			label museum
 			`	"Is that so?" the store own asks ecstatically.`
 			`	"In that case my friend how about 10000000 credits?"`
-			branch "payment museum"
-				"credits" >= 10000000
-			goto broke
-			label "payment museum"
-			payment -10000000
+			branch broke
+				"credits" < 10000000
+			action
+				payment -10000000
 			goto end
 
 			label middleman
 			`	"Is that so?" the store own asks interested.`
 			`	"In that case my friend how about 1000000 credits?"`
-			branch "payment middleman"
-				"credits" >= 1000000
-			goto broke
-			label "payment middleman"
-			payment -1000000
+			branch broke
+				"credits" < 1000000
+			action
+				payment -1000000
 			goto end
 			
 			label broke
@@ -89,14 +86,14 @@ mission "Ancient Text: 1"
 mission "Ancient Text: 2"
 	landing
 	name "Deciphering The Ancient Text"
-	description "While browsing at an old book story you came across an eery old book written in a script you have never seen before. Maybe the Hai Eruk on <destination> has some insight into this book?"
+	description "While browsing a antique store you came across an ancient box that is made in a similar material to the Emerald Sword. It is also covered in characters that seem vaguely familiar. Maybe the Hai Eruk on <destination> has some insight into this box?"
 	source "Vinci"
 	destination "Greenwater"
 	to offer
 		has "Ancient Text: 1: done"
 	on offer
 		conversation
-			`"[Science talk] Will take a sample and try to figure out what the materials are. In the mean time I would take the book to a linguist."`
+			`Albert Foster greets you in his normal enthusiastic manor "Well if it isn't Captain <first>! Don't keep me waiting in suspense "`
 				accept
 
 
