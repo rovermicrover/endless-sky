@@ -81,7 +81,7 @@ const Item *Sale<Item>::Sample() const
 {
 	auto it = this->begin();
 	std::advance(it, Random::Int(this->size()));
-	return (it == this->end() ? nullptr : &it);
+	return (it == this->end() ? nullptr : &(*it));
 }
 
 #endif
