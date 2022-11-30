@@ -654,18 +654,18 @@ int64_t Mission::OutfitCost() const
 double Mission::OutfitBulkBonus() const
 {
 	if(outfitUnits < 50)
-		return 1.
+		return 1.;
 
 	if(outfitUnits < 100)
-		return 1.1
+		return 1.1;
 
 	if(outfitUnits < 250)
-		return 1.25
+		return 1.25;
 
 	if(outfitUnits < 500)
-		return 1.5
+		return 1.5;
 
-	return 2.
+	return 2.;
 }
 
 
@@ -892,19 +892,19 @@ bool Mission::IsSatisfied(const PlayerInfo &player) const
 	int currentOutfitUnits = 0;
 	for(const auto &ship : player.Ships())
 	{
-		// Skip in-system ships, and carried ships whose parent is in-system.
+		// In-system ships, and carried ships whose parent is in-system check for outfits.
 		if(ship->GetSystem() == player.GetSystem() || (!ship->GetSystem() && ship->CanBeCarried()
 				&& ship->GetParent() && ship->GetParent()->GetSystem() == player.GetSystem()))
 			if(outfit)
 				currentOutfitUnits += ship->Cargo().Get(outfit);
-			continue;
-
-		if(ship->Cargo().GetPassengers(this))
-			return false;
-		// Check for all mission cargo, including that which has 0 mass.
-		auto &cargo = ship->Cargo().MissionCargo();
-		if(cargo.find(this) != cargo.end())
-			return false;
+		// Out of system ships check for missing mission cargo
+		else
+			if(ship->Cargo().GetPassengers(this))
+				return false;
+			// Check for all mission cargo, including that which has 0 mass.
+			auto &cargo = ship->Cargo().MissionCargo();
+			if(cargo.find(this) != cargo.end())
+				return false;
 	}
 
 	if(outfit && currentOutfitUnits < outfitUnits)
