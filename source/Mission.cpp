@@ -69,7 +69,7 @@ namespace {
 	}
 
 	// Pick a random outfit from an outfitter
-	const Outfit *PickOutfit(string &&outfitterName)
+	const Outfit *PickOutfit(const std::string &outfitterName)
 	{
 		std::array<Outfit> outfitsV(GameData::Outfits().size());
 		std::copy(GameData::Outfits().begin(), GameData::Outfits().end(), outfitsV.begin());
@@ -1116,7 +1116,7 @@ bool Mission::Do(Trigger trigger, PlayerInfo &player, UI *ui, const shared_ptr<S
 
 	if(trigger == COMPLETE && outfit && outfitUnits)
 	{
-		player.Cargo().remove(outfit, outfitUnits)
+		player.Cargo().Remove(outfit, outfitUnits)
 	}
 
 	return true;
