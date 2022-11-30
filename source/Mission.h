@@ -101,6 +101,9 @@ public:
 	const Outfit &RequestedOutfit() const;
 	int OutfitUnits() const;
 	double OutfitUnitsMass() const;
+	int64_t OutfitCost() const;
+	double OutfitBulkBonus() const;
+	int64_t OutfitCostWithBulkBonus() const;
 	int IllegalCargoFine() const;
 	std::string IllegalCargoMessage() const;
 	bool FailIfDiscovered() const;
