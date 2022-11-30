@@ -1333,12 +1333,12 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	// If outfit is needed, see if we are supposed to replace a generic
 	if(!outfitStr.empty())
 	{
-		result.outfit = GameData::Outfits.Get(outfitStr)
+		result.outfit = GameData::Outfits.Get(outfitStr);
 	}
 	// If outfitter is present select a random outfit from it
 	if(!outfitterStr.empty())
 	{
-		result.outfit = PickOutfit(outfitterStr)
+		result.outfit = PickOutfit(outfitterStr);
 	}
 	// Pick a random cargo amount, if requested.
 	if(cargoSize || cargoLimit)
