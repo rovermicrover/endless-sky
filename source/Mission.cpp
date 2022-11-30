@@ -893,18 +893,19 @@ bool Mission::IsSatisfied(const PlayerInfo &player) const
 	for(const auto &ship : player.Ships())
 	{
 		// In-system ships, and carried ships whose parent is in-system check for outfits.
-		if(ship->GetSystem() == player.GetSystem() || (!ship->GetSystem() && ship->CanBeCarried()
+		if(ship->GetSystem() == player.GetSystem() || (!ship->GetSystem() && ship->CanBeCarried() {
 				&& ship->GetParent() && ship->GetParent()->GetSystem() == player.GetSystem()))
 			if(outfit)
 				currentOutfitUnits += ship->Cargo().Get(outfit);
 		// Out of system ships check for missing mission cargo
-		else
+		} else {
 			if(ship->Cargo().GetPassengers(this))
 				return false;
 			// Check for all mission cargo, including that which has 0 mass.
 			auto &cargo = ship->Cargo().MissionCargo();
 			if(cargo.find(this) != cargo.end())
 				return false;
+		}
 	}
 
 	if(outfit && currentOutfitUnits < outfitUnits)
@@ -1115,9 +1116,7 @@ bool Mission::Do(Trigger trigger, PlayerInfo &player, UI *ui, const shared_ptr<S
 		player.MissionCallback(Conversation::ACCEPT);
 
 	if(trigger == COMPLETE && outfit && outfitUnits)
-	{
-		player.Cargo().Remove(outfit, outfitUnits)
-	}
+		player.Cargo().Remove(outfit, outfitUnits);
 
 	return true;
 }
