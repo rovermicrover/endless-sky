@@ -358,7 +358,7 @@ void Mission::Save(DataWriter &out, const string &tag) const
 		if(cargoSize)
 			out.Write("cargo", cargo, cargoSize);
 		if(outfit && outfitUnits)
-			out.Write("outfit", outfit->trueName, outfitUnits);
+			out.Write("outfit", outfit->TrueName(), outfitUnits);
 		if(passengers)
 			out.Write("passengers", passengers);
 		if(paymentApparent)
@@ -637,7 +637,7 @@ double Mission::OutfitUnitsMass() const
 {
 	if(!outfit)
 		return 0.;
-	return outfitUnits * outfit->mass;
+	return outfitUnits * outfit->Mass();
 }
 
 
@@ -646,7 +646,7 @@ int64_t Mission::OutfitCost() const
 {
 	if(!outfit)
 		return 0.;
-	return outfitUnits * outfit->cost;
+	return outfitUnits * outfit->Cost();
 }
 
 
@@ -1397,7 +1397,7 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	subs["<commodity>"] = result.cargo;
 	subs["<tons>"] = to_string(result.cargoSize) + (result.cargoSize == 1 ? " ton" : " tons");
 	subs["<cargo>"] = subs["<tons>"] + " of " + subs["<commodity>"];
-	subs["<outfit>"] = result.outfit->trueName;
+	subs["<outfit>"] = result.outfit->TrueName();
 	subs["<outfit-tons>"] = to_string(OutfitUnitsMass()) + (OutfitUnitsMass() == 1. ? " ton" : " tons");
 	subs["<outfit-cargo>"] = subs["<outfit-tons>"] + " of " + subs["<outfit>"];
 	subs["<bunks>"] = to_string(result.passengers);
