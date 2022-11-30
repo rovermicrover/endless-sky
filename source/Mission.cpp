@@ -24,6 +24,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Government.h"
 #include "Logger.h"
 #include "Messages.h"
+#include "Outfit.h"
 #include "Planet.h"
 #include "PlayerInfo.h"
 #include "Random.h"
@@ -31,7 +32,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "ShipEvent.h"
 #include "System.h"
 #include "UI.h"
-#include "Outfit.h"
 
 #include <cmath>
 #include <sstream>
@@ -190,7 +190,7 @@ void Mission::Load(const DataNode &node)
 		}
 		else if(child.Token(0) == "outfit" && child.Size() >= 3)
 		{
-			outfitStr = GetOutfit(child.Token(1));
+			outfitStr = child.Token(1);
 			outfitUnits = child.Value(2);
 			if(child.Size() >= 4)
 				outfitLimit = child.Value(3);
@@ -199,7 +199,7 @@ void Mission::Load(const DataNode &node)
 		}
 		else if(child.Token(0) == "outfitter" && child.Size() >= 3)
 		{
-			outfitterStr = GetOutfit(child.Token(1));
+			outfitterStr = child.Token(1);
 			outfitUnits = child.Value(2);
 			if(child.Size() >= 4)
 				outfitLimit = child.Value(3);
@@ -358,7 +358,7 @@ void Mission::Save(DataWriter &out, const string &tag) const
 		if(cargoSize)
 			out.Write("cargo", cargo, cargoSize);
 		if(outfit && outfitUnits)
-			out.Write("outfit", outfit.trueName, outfitUnits);
+			out.Write("outfit", outfit->trueName, outfitUnits);
 		if(passengers)
 			out.Write("passengers", passengers);
 		if(paymentApparent)
@@ -637,7 +637,7 @@ double Mission::OutfitUnitsMass() const
 {
 	if(!outfit)
 		return 0.;
-	return outfitUnits * outfit.mass;
+	return outfitUnits * outfit->mass;
 }
 
 
@@ -646,7 +646,7 @@ int64_t Mission::OutfitCost() const
 {
 	if(!outfit)
 		return 0.;
-	return outfitUnits * outfit.cost;
+	return outfitUnits * outfit->cost;
 }
 
 
@@ -1397,7 +1397,7 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	subs["<commodity>"] = result.cargo;
 	subs["<tons>"] = to_string(result.cargoSize) + (result.cargoSize == 1 ? " ton" : " tons");
 	subs["<cargo>"] = subs["<tons>"] + " of " + subs["<commodity>"];
-	subs["<outfit>"] = result.outfit.trueName;
+	subs["<outfit>"] = result.outfit->trueName;
 	subs["<outfit-tons>"] = to_string(OutfitUnitsMass()) + (OutfitUnitsMass() == 1. ? " ton" : " tons");
 	subs["<outfit-cargo>"] = subs["<outfit-tons>"] + " of " + subs["<outfit>"];
 	subs["<bunks>"] = to_string(result.passengers);

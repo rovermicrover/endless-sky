@@ -22,8 +22,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "LocationFilter.h"
 #include "MissionAction.h"
 #include "NPC.h"
-#include "TextReplacements.h"
 #include "Outfit.h"
+#include "TextReplacements.h"
 
 #include <list>
 #include <map>
