@@ -97,6 +97,9 @@ public:
 	const std::set<const Planet *> &VisitedStopovers() const;
 	const std::string &Cargo() const;
 	int CargoSize() const;
+	const Outfit &Outfit() const;
+	int OutfitUnits() const;
+	double OutfitUnitsMass() const
 	int IllegalCargoFine() const;
 	std::string IllegalCargoMessage() const;
 	bool FailIfDiscovered() const;
@@ -217,6 +220,13 @@ private:
 	int illegalCargoFine = 0;
 	std::string illegalCargoMessage;
 	bool failIfDiscovered = false;
+	// Parameters for generating random outfit amounts:
+	std:string outfitStr;
+	std:string outfitterStr;
+	const Outfit *outfit = nullptr;
+	int outfitUnits = 0;
+	int outfitLimit = 0;
+	double outfitProb = 0.;
 	int passengers = 0;
 	// Parameters for generating random passenger amounts:
 	int passengerLimit = 0;

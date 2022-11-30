@@ -1,0 +1,109 @@
+outfitter "Mining Job Outfitter"
+	"Aluminum"
+	"Copper"
+	"Gold"
+	"Iron"
+	"Lead"
+	"Neodymium"
+	"Platinum"
+	"Silicon"
+	"Silver"
+	"Titanium"
+	"Tungsten"
+	"Uranium"
+
+phrase "generic mineral payment dialog"
+	word
+		`Your client on <destination>`
+	word
+		` `
+		` gratefully `
+	word
+		`pays you <payment> for helping to`
+	word
+		` delivering `
+		` procuring `
+	word
+		`the requested `
+	word
+		`<mineral-units> of <mineral>.`
+
+phrase "generic mineral visit dialog"
+	word
+		`You arrived at <destination>, `
+	word
+		`but you don't have the `
+		`you have yet to mine the `
+	word
+		`<mineral-units> units of <mineral> yet.`
+
+outfitter "Mining Job Outfitter"
+	"Aluminum"
+	"Copper"
+	"Gold"
+	"Iron"
+	"Lead"
+	"Neodymium"
+	"Platinum"
+	"Silicon"
+	"Silver"
+	"Titanium"
+	"Tungsten"
+	"Uranium"
+
+mission "Mineral Very Large Bulk Delivery"
+	job
+	repeat
+	name "Very Large Bulk <mineral> Delivery."
+	description "A client on <destination> has requested an astonishing <mineral-units> units of <mineral>."
+	source
+		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
+	destination
+		distance 0
+		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
+	outfitter "Mining Job Outfitter" 250 750
+	to offer
+		random < 10
+	on visit
+		dialog phrase "generic mineral visit dialog"
+	on complete
+		payment
+		dialog phrase "generic mineral payment dialog"
+
+mission "Mineral Large Bulk Delivery"
+	job
+	repeat
+	name "Large Bulk <mineral> Delivery."
+	description "A client on <destination> has requested <mineral-units> units of <mineral>."
+	source
+		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
+	destination
+		distance 0
+		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
+	outfitter "Mining Job Outfitter" 100 500
+	to offer
+		random < 20
+	on visit
+		dialog phrase "generic mineral visit dialog"
+	on complete
+		payment
+		dialog phrase "generic mineral payment dialog"
+
+mission "Mineral Bulk Delivery"
+	job
+	repeat
+	name "Bulk <mineral> Delivery."
+	description "A client on <destination> has requested <mineral-units> units of <mineral>."
+	source
+		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
+	destination
+		distance 0
+		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
+	outfitter "Mining Job Outfitter" 50 150
+	to offer
+		random < 30
+	on visit
+		dialog phrase "generic mineral visit dialog"
+	on complete
+		payment
+		dialog phrase "generic mineral payment dialog"

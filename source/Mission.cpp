@@ -34,6 +34,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include <cmath>
 #include <sstream>
+#include <vector>
 
 using namespace std;
 
@@ -64,6 +65,15 @@ namespace {
 		}
 		// Control will never reach here, but to satisfy the compiler:
 		return nullptr;
+	}
+
+	// Pick a random outfit from an outfitter
+	const Outfit *PickOutfit(string &&outfitterName)
+	{
+		std::array<Outfit> outfitsV(GameData::Outfits().size());
+		std::copy(GameData::Outfits().begin(), GameData::Outfits().end(), outfitsV.begin());
+		int r = Random::Int(outfitsV.size());
+		return outfitsV[r];
 	}
 
 	// If a source, destination, waypoint, or stopover supplies more than one explicit choice
@@ -176,6 +186,24 @@ void Mission::Load(const DataNode &node)
 					grand.PrintTrace("Warning: Deprecated use of \"stealth\" and \"illegal\" as a child of \"cargo\"."
 						" They are now mission-level properties:");
 			}
+		}
+		else if(child.Token(0) == "outfit" && child.Size() >= 3)
+		{
+			outfitStr = GetOutfit(child.Token(1));
+			outfitUnits = child.Value(2);
+			if(child.Size() >= 4)
+				outfitLimit = child.Value(3);
+			if(child.Size() >= 5)
+				outfitProb = child.Value(4);
+		}
+		else if(child.Token(0) == "outfitter" && child.Size() >= 3)
+		{
+			outfitterStr = GetOutfit(child.Token(1));
+			outfitUnits = child.Value(2);
+			if(child.Size() >= 4)
+				outfitLimit = child.Value(3);
+			if(child.Size() >= 5)
+				outfitProb = child.Value(4);
 		}
 		else if(child.Token(0) == "passengers" && child.Size() >= 2)
 		{
@@ -328,6 +356,8 @@ void Mission::Save(DataWriter &out, const string &tag) const
 			out.Write("deadline", deadline.Day(), deadline.Month(), deadline.Year());
 		if(cargoSize)
 			out.Write("cargo", cargo, cargoSize);
+		if(outfit && outfitUnits)
+			out.Write("outfit", outfit.trueName, outfitUnits);
 		if(passengers)
 			out.Write("passengers", passengers);
 		if(paymentApparent)
@@ -588,6 +618,64 @@ int Mission::CargoSize() const
 
 
 
+const Outfit &Mission::Outfit() const
+{
+	return outfit;
+}
+
+
+
+int Mission::OutfitUnits() const
+{
+	return outfitUnits;
+}
+
+
+
+double Mission::OutfitUnitsMass() const
+{
+	if(!outfit)
+		return 0.;
+	return outfitUnits * outfit.mass;
+}
+
+
+
+int64_t Mission::OutfitCost() const
+{
+	if(!outfit)
+		return 0.;
+	return outfitUnits * outfit.cost;
+}
+
+
+
+double Mission::OutfitBulkBonus() const
+{
+	if(outfitUnits < 50)
+		return 1.
+
+	if(outfitUnits < 100)
+		return 1.1
+
+	if(outfitUnits < 250)
+		return 1.25
+
+	if(outfitUnits < 500)
+		return 1.5
+
+	return 2.
+}
+
+
+
+int64_t Mission::OutfitCostWithBulkBonus() const
+{
+	return static_cast<int64_t>(OutfitCost() * OutfitBulkBonus());
+}
+
+
+
 int Mission::IllegalCargoFine() const
 {
 	return illegalCargoFine;
@@ -752,7 +840,7 @@ bool Mission::HasSpace(const PlayerInfo &player) const
 	int extraCrew = 0;
 	if(player.Flagship())
 		extraCrew = player.Flagship()->Crew() - player.Flagship()->RequiredCrew();
-	return (cargoSize <= player.Cargo().Free() + player.Cargo().CommoditiesSize()
+	return ((cargoSize + ceil(OutfitUnitsMass())) <= player.Cargo().Free() + player.Cargo().CommoditiesSize()
 		&& passengers <= player.Cargo().BunksFree() + extraCrew);
 }
 
@@ -761,7 +849,7 @@ bool Mission::HasSpace(const PlayerInfo &player) const
 // Check if this mission's cargo can fit entirely on the referenced ship.
 bool Mission::HasSpace(const Ship &ship) const
 {
-	return (cargoSize <= ship.Cargo().Free() && passengers <= ship.Cargo().BunksFree());
+	return ((cargoSize + ceil(OutfitUnitsMass())) <= ship.Cargo().Free() && passengers <= ship.Cargo().BunksFree());
 }
 
 
@@ -800,11 +888,14 @@ bool Mission::IsSatisfied(const PlayerInfo &player) const
 
 	// If any of the cargo for this mission is being carried by a ship that is
 	// not in this system, the mission cannot be completed right now.
+	int currentOutfitUnits = 0;
 	for(const auto &ship : player.Ships())
 	{
 		// Skip in-system ships, and carried ships whose parent is in-system.
 		if(ship->GetSystem() == player.GetSystem() || (!ship->GetSystem() && ship->CanBeCarried()
 				&& ship->GetParent() && ship->GetParent()->GetSystem() == player.GetSystem()))
+			if(outfit)
+				currentOutfitUnits += ship->Cargo().Get(outfit);
 			continue;
 
 		if(ship->Cargo().GetPassengers(this))
@@ -814,6 +905,9 @@ bool Mission::IsSatisfied(const PlayerInfo &player) const
 		if(cargo.find(this) != cargo.end())
 			return false;
 	}
+
+	if(outfit && currentOutfitUnits < outfitUnits)
+		return false;
 
 	return true;
 }
@@ -864,7 +958,7 @@ string Mission::BlockedMessage(const PlayerInfo &player)
 	if(flagship && player.GetPlanet())
 		extraCrew = flagship->Crew() - flagship->RequiredCrew();
 
-	int cargoNeeded = cargoSize;
+	int cargoNeeded = cargoSize + ceil(OutfitUnitsMass());
 	int bunksNeeded = passengers;
 	if(player.GetPlanet())
 	{
@@ -1018,6 +1112,11 @@ bool Mission::Do(Trigger trigger, PlayerInfo &player, UI *ui, const shared_ptr<S
 		it->second.Do(player, ui, (destination && isVisible) ? destination->GetSystem() : nullptr, boardingShip, IsUnique());
 	else if(trigger == OFFER && location != JOB)
 		player.MissionCallback(Conversation::ACCEPT);
+
+	if(trigger == COMPLETE && outfit && outfitUnits)
+	{
+		player.Cargo().remove(outfit, outfitUnits)
+	}
 
 	return true;
 }
@@ -1231,6 +1330,16 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 		else
 			result.cargo = cargo;
 	}
+	// If outfit is needed, see if we are supposed to replace a generic
+	if(!outfitStr.empty())
+	{
+		result.outfit = GameData::Outfits.Get(outfitStr)
+	}
+	// If outfitter is present select a random outfit from it
+	if(!outfitterStr.empty())
+	{
+		result.outfit = PickOutfit(outfitterStr)
+	}
 	// Pick a random cargo amount, if requested.
 	if(cargoSize || cargoLimit)
 	{
@@ -1240,6 +1349,16 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 			result.cargoSize = cargoSize + Random::Int(cargoLimit - cargoSize + 1);
 		else
 			result.cargoSize = cargoSize;
+	}
+	// Pick a random outfit amount, if requested.
+	if(outfitUnits || outfitLimit)
+	{
+		if(outfitProb)
+			result.outfitUnits = Random::Polya(outfitLimit, outfitProb) + outfitUnits;
+		else if(outfitLimit > outfitUnits)
+			result.outfitUnits = outfitUnits + Random::Int(outfitLimit - outfitUnits + 1);
+		else
+			result.outfitUnits = outfitUnits;
 	}
 	// Pick a random passenger count, if requested.
 	if(passengers || passengerLimit)
@@ -1258,7 +1377,7 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 
 	int jumps = result.CalculateJumps(sourceSystem);
 
-	int64_t payload = static_cast<int64_t>(result.cargoSize) + 10 * static_cast<int64_t>(result.passengers);
+	int64_t payload = OutfitCostWithBulkBonus() + static_cast<int64_t>(result.cargoSize) + 10 * static_cast<int64_t>(result.passengers);
 
 	// Set the deadline, if requested.
 	if(deadlineBase || deadlineMultiplier)
@@ -1277,6 +1396,9 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	subs["<commodity>"] = result.cargo;
 	subs["<tons>"] = to_string(result.cargoSize) + (result.cargoSize == 1 ? " ton" : " tons");
 	subs["<cargo>"] = subs["<tons>"] + " of " + subs["<commodity>"];
+	subs["<outfit>"] = result.outfit.trueName;
+	subs["<outfit-tons>"] = to_string(OutfitUnitsMass()) + (OutfitUnitsMass() == 1. ? " ton" : " tons");
+	subs["<outfit-cargo>"] = subs["<outfit-tons>"] + " of " + subs["<outfit>"];
 	subs["<bunks>"] = to_string(result.passengers);
 	subs["<passengers>"] = (result.passengers == 1) ? "passenger" : "passengers";
 	subs["<fare>"] = (result.passengers == 1) ? "a passenger" : (subs["<bunks>"] + " passengers");
