@@ -98,7 +98,7 @@ public:
 	const std::set<const Planet *> &VisitedStopovers() const;
 	const std::string &Cargo() const;
 	int CargoSize() const;
-	const Outfit &RequestedOutfit() const;
+	const Outfit *RequestedOutfit() const;
 	int OutfitUnits() const;
 	double OutfitUnitsMass() const;
 	int64_t OutfitCost() const;

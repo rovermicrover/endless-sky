@@ -619,7 +619,7 @@ int Mission::CargoSize() const
 
 
 
-const Outfit &Mission::RequestedOutfit() const
+const Outfit *Mission::RequestedOutfit() const
 {
 	return outfit;
 }
