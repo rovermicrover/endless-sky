@@ -100,7 +100,7 @@ public:
 	int CargoSize() const;
 	const Outfit &RequestedOutfit() const;
 	int OutfitUnits() const;
-	double OutfitUnitsMass() const
+	double OutfitUnitsMass() const;
 	int IllegalCargoFine() const;
 	std::string IllegalCargoMessage() const;
 	bool FailIfDiscovered() const;
@@ -222,8 +222,8 @@ private:
 	std::string illegalCargoMessage;
 	bool failIfDiscovered = false;
 	// Parameters for generating random outfit amounts:
-	std:string outfitStr;
-	std:string outfitterStr;
+	std::string outfitStr;
+	std::string outfitterStr;
 	const Outfit *outfit = nullptr;
 	int outfitUnits = 0;
 	int outfitLimit = 0;
