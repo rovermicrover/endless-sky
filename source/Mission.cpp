@@ -68,15 +68,6 @@ namespace {
 		return nullptr;
 	}
 
-	// Pick a random outfit from an outfitter
-	const Outfit *PickOutfit(const std::string &outfitterName)
-	{
-		std::vector<Outfit> outfitsV(GameData::Outfits().size());
-		std::copy(GameData::Outfits().begin(), GameData::Outfits().end(), std::back_inserter(outfitsV));
-		int r = Random::Int(outfitsV.size());
-		return &outfitsV[r];
-	}
-
 	// If a source, destination, waypoint, or stopover supplies more than one explicit choice
 	// or a mixture of explicit choice and location filter, print a warning.
 	void ParseMixedSpecificity(const DataNode &node, string &&kind, int expected)
@@ -1338,7 +1329,7 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	// If outfitter is present select a random outfit from it
 	if(!outfitterStr.empty())
 	{
-		result.outfit = PickOutfit(outfitterStr);
+		result.outfit = GameData::Outfits().Sample();
 	}
 	// Pick a random cargo amount, if requested.
 	if(cargoSize || cargoLimit)

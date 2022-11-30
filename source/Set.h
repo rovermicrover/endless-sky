@@ -18,6 +18,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include <map>
 #include <string>
+#include "Random.h"
 
 
 
@@ -36,6 +37,8 @@ public:
 	const Type *Find(const std::string &name) const;
 
 	bool Has(const std::string &name) const { return data.count(name); }
+
+	const Type *Sample() const;
 
 	typename std::map<std::string, Type>::iterator begin() { return data.begin(); }
 	typename std::map<std::string, Type>::const_iterator begin() const { return data.begin(); }
@@ -60,6 +63,16 @@ template <class Type>
 const Type *Set<Type>::Find(const std::string &name) const
 {
 	auto it = data.find(name);
+	return (it == data.end() ? nullptr : &it->second);
+}
+
+
+
+template <class Type>
+const Type *Set<Type>::Sample() const
+{
+	auto it = data.begin();
+	std::advance(it, Random::Int(data.size()));
 	return (it == data.end() ? nullptr : &it->second);
 }
 
