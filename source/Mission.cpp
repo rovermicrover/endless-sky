@@ -69,12 +69,12 @@ namespace {
 	}
 
 	// Pick a random outfit from an outfitter
-	const Outfit &PickOutfit(const std::string &outfitterName)
+	const Outfit *PickOutfit(const std::string &outfitterName)
 	{
 		std::vector<Outfit> outfitsV(GameData::Outfits().size());
 		std::copy(GameData::Outfits().begin(), GameData::Outfits().end(), std::back_inserter(outfitsV));
 		int r = Random::Int(outfitsV.size());
-		return outfitsV[r];
+		return &outfitsV[r];
 	}
 
 	// If a source, destination, waypoint, or stopover supplies more than one explicit choice
