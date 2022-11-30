@@ -1329,7 +1329,7 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	// If outfitter is present select a random outfit from it
 	if(!outfitterStr.empty())
 	{
-		result.outfit = GameData::Outfits().Sample();
+		result.outfit = GameData::Outfitters().Get(outfitterStr).Sample();
 	}
 	// Pick a random cargo amount, if requested.
 	if(cargoSize || cargoLimit)

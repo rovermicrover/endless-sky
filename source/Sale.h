@@ -34,6 +34,8 @@ public:
 	void Add(const Sale<Item> &other);
 
 	bool Has(const Item *item) const;
+
+	const Item *Sample() const;
 };
 
 
@@ -73,5 +75,13 @@ bool Sale<Item>::Has(const Item *item) const
 }
 
 
+
+template <class Item>
+const Item *Sale<Item>::Sample() const
+{
+	auto it = this->begin();
+	std::advance(it, Random::Int(this->size()));
+	return (it == this->end() ? nullptr : &it->second);
+}
 
 #endif
