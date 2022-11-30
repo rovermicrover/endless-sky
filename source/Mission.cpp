@@ -71,8 +71,8 @@ namespace {
 	// Pick a random outfit from an outfitter
 	const Outfit &PickOutfit(const std::string &outfitterName)
 	{
-		std::array<Outfit, GameData::Outfits().size()> outfitsV();
-		std::copy(GameData::Outfits().begin(), GameData::Outfits().end(), outfitsV.begin());
+		std::vector<Outfit> outfitsV(GameData::Outfits().size());
+		std::copy(GameData::Outfits().begin(), GameData::Outfits().end(), std::back_inserter(outfitsV));
 		int r = Random::Int(outfitsV.size());
 		return outfitsV[r];
 	}
