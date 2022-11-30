@@ -31,6 +31,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "ShipEvent.h"
 #include "System.h"
 #include "UI.h"
+#include "Outfit.h"
 
 #include <cmath>
 #include <sstream>
@@ -618,7 +619,7 @@ int Mission::CargoSize() const
 
 
 
-const Outfit &Mission::Outfit() const
+const Outfit &Mission::RequestedOutfit() const
 {
 	return outfit;
 }

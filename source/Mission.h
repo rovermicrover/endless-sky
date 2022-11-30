@@ -23,6 +23,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "MissionAction.h"
 #include "NPC.h"
 #include "TextReplacements.h"
+#include "Outfit.h"
 
 #include <list>
 #include <map>
@@ -97,7 +98,7 @@ public:
 	const std::set<const Planet *> &VisitedStopovers() const;
 	const std::string &Cargo() const;
 	int CargoSize() const;
-	const Outfit &Outfit() const;
+	const Outfit &RequestedOutfit() const;
 	int OutfitUnits() const;
 	double OutfitUnitsMass() const
 	int IllegalCargoFine() const;
