@@ -102,6 +102,7 @@ public:
 	int OutfitUnits() const;
 	std::string OutfitName() const;
 	double OutfitUnitsMass() const;
+	int64_t OutfitUnitsMassInt() const;
 	int64_t OutfitCost() const;
 	double OutfitBulkBonus() const;
 	int64_t OutfitCostWithBulkBonus() const;
