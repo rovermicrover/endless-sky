@@ -328,7 +328,7 @@ void MissionAction::Do(PlayerInfo &player, UI *ui, const System *destination,
 
 // Convert this validated template into a populated action.
 MissionAction MissionAction::Instantiate(map<string, string> &subs, const System *origin,
-	int jumps, int64_t payload, map<const Outfit *, int> &additionalRequiredOutfits = map<const Outfit *, int>()) const
+	int jumps, int64_t payload, map<const Outfit *, int> &additionalRequiredOutfits = nullptr) const
 {
 	MissionAction result;
 	result.trigger = trigger;
@@ -338,11 +338,13 @@ MissionAction MissionAction::Instantiate(map<string, string> &subs, const System
 
 	// Add any additional required outfits
 	map<const Outfit *, int> mergedRequiredOutfits(requiredOutfits)
-	for(auto& it : additionalRequiredOutfits)
-	{
-		if(mergedRequiredOutfits.count(it.first) == 0)
-			mergedRequiredOutfits[it.first] = 0;
-		mergedRequiredOutfits[it.first] += it.second
+	if(additionalRequiredOutfits) {
+		for(auto& it : additionalRequiredOutfits)
+		{
+			if(mergedRequiredOutfits.count(it.first) == 0)
+				mergedRequiredOutfits[it.first] = 0;
+			mergedRequiredOutfits[it.first] += it.second
+		}
 	}
 	result.requiredOutfits = mergedRequiredOutfits;
 
