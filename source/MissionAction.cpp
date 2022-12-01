@@ -342,7 +342,7 @@ MissionAction MissionAction::Instantiate(map<string, string> &subs, const System
 	{
 		if(mergedRequiredOutfits.count(it.first) == 0)
 			mergedRequiredOutfits[it.first] = 0;
-		mergedRequiredOutfits[it.first] += it.second
+		mergedRequiredOutfits[it.first] += it.second;
 	}
 	result.requiredOutfits = mergedRequiredOutfits;
 
