@@ -627,8 +627,8 @@ int Mission::OutfitUnits() const
 std::string Mission::OutfitName() const
 {
 	if(!outfit)
-		return '';
-	return outfitUnits * outfit->TrueName();
+		return "";
+	return outfit->TrueName();
 }
 
 
