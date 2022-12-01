@@ -348,8 +348,6 @@ void Mission::Save(DataWriter &out, const string &tag) const
 			out.Write("deadline", deadline.Day(), deadline.Month(), deadline.Year());
 		if(cargoSize)
 			out.Write("cargo", cargo, cargoSize);
-		if(outfit && outfitUnits)
-			out.Write("outfit", outfit->TrueName(), outfitUnits);
 		if(passengers)
 			out.Write("passengers", passengers);
 		if(paymentApparent)
@@ -896,29 +894,20 @@ bool Mission::IsSatisfied(const PlayerInfo &player) const
 
 	// If any of the cargo for this mission is being carried by a ship that is
 	// not in this system, the mission cannot be completed right now.
-	int currentOutfitUnits = 0;
 	for(const auto &ship : player.Ships())
 	{
-		// In-system ships, and carried ships whose parent is in-system check for outfits.
+		// Skip in-system ships, and carried ships whose parent is in-system.
 		if(ship->GetSystem() == player.GetSystem() || (!ship->GetSystem() && ship->CanBeCarried()
-				&& ship->GetParent() && ship->GetParent()->GetSystem() == player.GetSystem())) {
-			if(outfit)
-				currentOutfitUnits += ship->Cargo().Get(outfit);
-		// Out of system ships check for missing mission cargo
-		}
-		else
-		{
-			if(ship->Cargo().GetPassengers(this))
-				return false;
-			// Check for all mission cargo, including that which has 0 mass.
-			auto &cargo = ship->Cargo().MissionCargo();
-			if(cargo.find(this) != cargo.end())
-				return false;
-		}
-	}
+				&& ship->GetParent() && ship->GetParent()->GetSystem() == player.GetSystem()))
+			continue;
 
-	if(outfit && currentOutfitUnits < outfitUnits)
-		return false;
+		if(ship->Cargo().GetPassengers(this))
+			return false;
+		// Check for all mission cargo, including that which has 0 mass.
+		auto &cargo = ship->Cargo().MissionCargo();
+		if(cargo.find(this) != cargo.end())
+			return false;
+	}
 
 	return true;
 }
@@ -1110,9 +1099,6 @@ bool Mission::Do(Trigger trigger, PlayerInfo &player, UI *ui, const shared_ptr<S
 	if(trigger == OFFER && location == JOB)
 		ui = nullptr;
 
-	// If this is a outfit job that is done, ensure that we remove the needed outfits
-	if(trigger == COMPLETE && outfit && outfitUnits)
-		player.Cargo().Remove(outfit, outfitUnits);
 	// If this trigger has actions tied to it, perform them. Otherwise, check
 	// if this is a non-job mission that just got offered and if so,
 	// automatically accept it.
@@ -1388,7 +1374,7 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 
 	int64_t cargoPayload = static_cast<int64_t>(result.cargoSize);
 	int64_t passengerPayload = 10 * static_cast<int64_t>(result.passengers);
-	int64_t payload = OutfitCostWithBulkBonus() + cargoPayload + passengerPayload;
+	int64_t payload = result.OutfitCostWithBulkBonus() + cargoPayload + passengerPayload;
 
 	// Set the deadline, if requested.
 	if(deadlineBase || deadlineMultiplier)
@@ -1485,7 +1471,18 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 		return result;
 	}
 	for(const auto &it : actions)
-		result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload);
+		// Any requested outfits should be handled by the complete action
+		if(it.first == COMPLETE && result.RequestedOutfit() && result.OutfitUnits() > 0)
+		{
+			const map<const Outfit *, int> additionalRequiredOutfits = {
+				{result.RequestedOutfit(), result.OutfitUnits() * -1}
+			};
+			result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload, additionalRequiredOutfits);
+		}
+		else
+		{
+			result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload);
+		}
 
 	auto oit = onEnter.begin();
 	for( ; oit != onEnter.end(); ++oit)
