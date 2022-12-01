@@ -67,7 +67,7 @@ public:
 	// destination, payment, cargo, etc.
 	MissionAction Instantiate(std::map<std::string, std::string> &subs,
 		const System *origin, int jumps, int64_t payload,
-		const std::map<const Outfit *, int> &additionalRequiredOutfits = std::map<const Outfit *, int>()) const;
+		const std::map<const Outfit *, int> &additionalRequiredOutfits = {}) const;
 
 	int64_t Payment() const noexcept;
 

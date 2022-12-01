@@ -338,7 +338,7 @@ MissionAction MissionAction::Instantiate(map<string, string> &subs, const System
 
 	// Add any additional required outfits
 	map<const Outfit *, int> mergedRequiredOutfits(requiredOutfits)
-	for(auto& it : additionalRequiredOutfits)
+	for(auto &it : additionalRequiredOutfits)
 	{
 		if(mergedRequiredOutfits.count(it.first) == 0)
 			mergedRequiredOutfits[it.first] = 0;
