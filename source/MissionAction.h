@@ -66,7 +66,8 @@ public:
 	// "Instantiate" this action by filling in the wildcard text for the actual
 	// destination, payment, cargo, etc.
 	MissionAction Instantiate(std::map<std::string, std::string> &subs,
-		const System *origin, int jumps, int64_t payload, std::map<const Outfit *, int> &additionalRequiredOutfits = nullptr) const;
+		const System *origin, int jumps, int64_t payload,
+		const std::map<const Outfit *, int> &additionalRequiredOutfits = std::map<const Outfit *, int>()) const;
 
 	int64_t Payment() const noexcept;
 
