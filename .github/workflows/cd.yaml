@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - mining-missions-stable
   pull_request:
     types:
       - synchronize
