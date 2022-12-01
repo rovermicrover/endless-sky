@@ -889,8 +889,8 @@ bool Mission::IsSatisfied(const PlayerInfo &player) const
 			if(outfit)
 				currentOutfitUnits += ship->Cargo().Get(outfit);
 		// Out of system ships check for missing mission cargo
-		} 
-		else 
+		}
+		else
 		{
 			if(ship->Cargo().GetPassengers(this))
 				return false;
