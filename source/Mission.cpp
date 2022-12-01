@@ -889,7 +889,9 @@ bool Mission::IsSatisfied(const PlayerInfo &player) const
 			if(outfit)
 				currentOutfitUnits += ship->Cargo().Get(outfit);
 		// Out of system ships check for missing mission cargo
-		} else {
+		} 
+		else 
+		{
 			if(ship->Cargo().GetPassengers(this))
 				return false;
 			// Check for all mission cargo, including that which has 0 mass.
@@ -1368,7 +1370,9 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 
 	int jumps = result.CalculateJumps(sourceSystem);
 
-	int64_t payload = OutfitCostWithBulkBonus() + static_cast<int64_t>(result.cargoSize) + 10 * static_cast<int64_t>(result.passengers);
+	int64_t cargoPayload = static_cast<int64_t>(result.cargoSize);
+	int64_t passengerPayload = 10 * static_cast<int64_t>(result.passengers);
+	int64_t payload = OutfitCostWithBulkBonus() + cargoPayload + passengerPayload;
 
 	// Set the deadline, if requested.
 	if(deadlineBase || deadlineMultiplier)

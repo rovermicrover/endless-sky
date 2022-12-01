@@ -16,9 +16,10 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #ifndef SET_H_
 #define SET_H_
 
+#include "Random.h"
+
 #include <map>
 #include <string>
-#include "Random.h"
 
 
 
