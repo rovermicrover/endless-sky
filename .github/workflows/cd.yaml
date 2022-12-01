@@ -3,7 +3,6 @@ name: CD
 on:
   push:
     branches:
-      - master
       - mining-missions-stable
   pull_request:
     types:
@@ -19,7 +18,7 @@ jobs:
   cd_ubuntu_x86_64:
     runs-on: ubuntu-latest
     env:
-      OUTPUT: endless-sky-x86_64-continuous.tar.gz
+      OUTPUT: endless-sky-x86_64-mining-missions.tar.gz
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
@@ -47,7 +46,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       ARCH: x86_64
-      OUTPUT: endless-sky-x86_64-continuous.AppImage
+      OUTPUT: endless-sky-x86_64-mining-missions.AppImage
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
@@ -72,7 +71,7 @@ jobs:
     env:
       DIR_MINGW64: C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64
       DIR_ESLIB: .\dev64
-      OUTPUT: EndlessSky-win64-continuous.zip
+      OUTPUT: EndlessSky-win64-mining-missions.zip
       AR: gcc-ar
     steps:
       - uses: actions/checkout@v2
@@ -108,7 +107,7 @@ jobs:
   cd_macos_x86_64:
     runs-on: macos-latest
     env:
-      OUTPUT: EndlessSky-macOS-continuous.zip
+      OUTPUT: EndlessSky-macOS-mining-missions.zip
       SDL2_FRAMEWORK: build/SDL2.framework
     steps:
       - uses: actions/checkout@v2
@@ -146,10 +145,10 @@ jobs:
       - cd_macos_x86_64
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      OUTPUT_UBUNTU: endless-sky-x86_64-continuous.tar.gz
-      OUTPUT_APPIMAGE: endless-sky-x86_64-continuous.AppImage
-      OUTPUT_WINDOWS: EndlessSky-win64-continuous.zip
-      OUTPUT_MACOS: EndlessSky-macOS-continuous.zip
+      OUTPUT_UBUNTU: endless-sky-x86_64-mining-missions.tar.gz
+      OUTPUT_APPIMAGE: endless-sky-x86_64-mining-missions.AppImage
+      OUTPUT_WINDOWS: EndlessSky-win64-mining-missions.zip
+      OUTPUT_MACOS: EndlessSky-macOS-mining-missions.zip
     steps:
       - uses: actions/checkout@v2
       - name: Install github-release
@@ -161,26 +160,26 @@ jobs:
         run: |
           echo "GITHUB_USER=$( echo ${{ github.repository }} | cut -d/ -f1 )" >> $GITHUB_ENV
           echo "GITHUB_REPO=$( echo ${{ github.repository }} | cut -d/ -f2 )" >> $GITHUB_ENV
-      - name: Move/Create continuous tag
+      - name: Move/Create mining-missions tag
         run: |
-          git tag --force continuous ${{ github.sha }}
+          git tag --force mining-missions ${{ github.sha }}
           git push --tags --force
-      - name: Setup continuous release
+      - name: Setup mining-missions release
         run: |
           DESCRIPTION="Triggered on $(date -u '+%Y/%m/%d, %H:%M') UTC by commit ${{ github.sha }} (@${{ github.actor }})
 
           This is an automated build of the latest source. It may be unstable or even crash, corrupt your save or eat your kitten. Use with caution!
 
           https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          if ! github-release info -t continuous > /dev/null 2>&1; then
+          if ! github-release info -t mining-missions > /dev/null 2>&1; then
             github-release release \
-              --tag continuous \
+              --tag mining-missions \
               --name "Continuous Build" \
               --description "$DESCRIPTION" \
               --pre-release
           else
             github-release edit \
-              --tag continuous \
+              --tag mining-missions \
               --name "Continuous Build" \
               --description "$DESCRIPTION" \
               --pre-release
@@ -192,28 +191,28 @@ jobs:
       - name: Add ${{ env.OUTPUT_UBUNTU }} to release tag
         run: |
           github-release upload \
-            --tag continuous \
+            --tag mining-missions \
             --replace \
             --name ${{ env.OUTPUT_UBUNTU }} \
             --file ${{ env.OUTPUT_UBUNTU }}/${{ env.OUTPUT_UBUNTU }}
       - name: Add ${{ env.OUTPUT_APPIMAGE }} to release tag
         run: |
           github-release upload \
-            --tag continuous \
+            --tag mining-missions \
             --replace \
             --name ${{ env.OUTPUT_APPIMAGE }} \
             --file ${{ env.OUTPUT_APPIMAGE }}/${{ env.OUTPUT_APPIMAGE }}
       - name: Add ${{ env.OUTPUT_WINDOWS }} to release tag
         run: |
           github-release upload \
-            --tag continuous \
+            --tag mining-missions \
             --replace \
             --name ${{ env.OUTPUT_WINDOWS }} \
             --file ${{ env.OUTPUT_WINDOWS }}/${{ env.OUTPUT_WINDOWS }}
       - name: Add ${{ env.OUTPUT_MACOS }} to release tag
         run: |
           github-release upload \
-            --tag continuous \
+            --tag mining-missions \
             --replace \
             --name ${{ env.OUTPUT_MACOS }} \
             --file ${{ env.OUTPUT_MACOS }}/${{ env.OUTPUT_MACOS }}
