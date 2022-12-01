@@ -642,6 +642,13 @@ double Mission::OutfitUnitsMass() const
 
 
 
+int64_t Mission::OutfitUnitsMassInt() const
+{
+	return static_cast<int64_t>(std::ceil(Mission::OutfitUnitsMass()));
+}
+
+
+
 int64_t Mission::OutfitCost() const
 {
 	if(!outfit)
@@ -1402,7 +1409,8 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	subs["<cargo>"] = subs["<tons>"] + " of " + subs["<commodity>"];
 	subs["<outfit>"] = result.OutfitName();
 	subs["<outfit-units>"] = to_string(result.OutfitUnits());
-	subs["<outfit-tons>"] = to_string(result.OutfitUnitsMass()) + (result.OutfitUnitsMass() == 1. ? " ton" : " tons");
+	subs["<outfit-tons>"] = (to_string(result.OutfitUnitsMassInt()) 
+		+ (result.OutfitUnitsMassInt() == 1 ? " ton" : " tons"));
 	subs["<outfit-cargo>"] = (subs["<outfit-units>"] + " units of " + subs["<outfit>"]
 		+ " totaling " + subs["<outfit-tons>"]);
 	subs["<bunks>"] = to_string(result.passengers);

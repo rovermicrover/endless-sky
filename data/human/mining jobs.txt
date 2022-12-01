@@ -44,7 +44,7 @@ phrase "generic mineral visit dialog"
 mission "Mineral Very Large Bulk Delivery"
 	job
 	repeat
-	name "Very Large Bulk <outfit> Delivery."
+	name "Very Large Bulk <outfit> Delivery"
 	description "A client on <destination> has requested an astonishing <outfit-cargo>."
 	source
 		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
@@ -63,7 +63,7 @@ mission "Mineral Very Large Bulk Delivery"
 mission "Mineral Large Bulk Delivery"
 	job
 	repeat
-	name "Large Bulk <outfit> Delivery."
+	name "Large Bulk <outfit> Delivery"
 	description "A client on <destination> has requested <outfit-cargo>."
 	source
 		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
@@ -82,14 +82,14 @@ mission "Mineral Large Bulk Delivery"
 mission "Mineral Bulk Delivery"
 	job
 	repeat
-	name "Bulk <outfit> Delivery."
+	name "Bulk <outfit> Delivery"
 	description "A client on <destination> has requested <outfit-cargo>."
 	source
 		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
 	destination
 		distance 0
 		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
-	outfit "Iron" 50 150
+	outfitter "Mining Job Outfitter" 50 150
 	to offer
 		random < 30
 	on visit
