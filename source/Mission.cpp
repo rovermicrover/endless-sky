@@ -1474,8 +1474,9 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 		// Any requested outfits should be handled by the complete action
 		if(it.first == COMPLETE && OutfitUnits() > 0)
 		{
-			map<const Outfit *, int> additionalRequiredOutfits();
-			additionalRequiredOutfits[RequestedOutfit()] = OutfitUnits() * -1;
+			const map<const Outfit *, int> additionalRequiredOutfits = {
+				{RequestedOutfit(), OutfitUnits() * -1}
+			};
 			result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload, additionalRequiredOutfits);
 		}
 		else
