@@ -100,6 +100,7 @@ public:
 	int CargoSize() const;
 	const Outfit *RequestedOutfit() const;
 	int OutfitUnits() const;
+	std::string OutfitName() const;
 	double OutfitUnitsMass() const;
 	int64_t OutfitCost() const;
 	double OutfitBulkBonus() const;

@@ -624,6 +624,15 @@ int Mission::OutfitUnits() const
 
 
 
+std::string Mission::OutfitName() const
+{
+	if(!outfit)
+		return '';
+	return outfitUnits * outfit->TrueName();
+}
+
+
+
 double Mission::OutfitUnitsMass() const
 {
 	if(!outfit)
@@ -1391,7 +1400,7 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	subs["<commodity>"] = result.cargo;
 	subs["<tons>"] = to_string(result.cargoSize) + (result.cargoSize == 1 ? " ton" : " tons");
 	subs["<cargo>"] = subs["<tons>"] + " of " + subs["<commodity>"];
-	subs["<outfit>"] = result.outfit->TrueName();
+	subs["<outfit>"] = OutfitName();
 	subs["<outfit-tons>"] = to_string(OutfitUnitsMass()) + (OutfitUnitsMass() == 1. ? " ton" : " tons");
 	subs["<outfit-cargo>"] = subs["<outfit-tons>"] + " of " + subs["<outfit>"];
 	subs["<bunks>"] = to_string(result.passengers);
