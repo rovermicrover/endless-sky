@@ -337,7 +337,7 @@ MissionAction MissionAction::Instantiate(map<string, string> &subs, const System
 	result.systemFilter = systemFilter.SetOrigin(origin);
 
 	// Add any additional required outfits
-	map<const Outfit *, int> mergedRequiredOutfits(requiredOutfits)
+	map<const Outfit *, int> mergedRequiredOutfits(requiredOutfits);
 	for(auto &it : additionalRequiredOutfits)
 	{
 		if(mergedRequiredOutfits.count(it.first) == 0)
