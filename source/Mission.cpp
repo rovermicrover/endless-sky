@@ -1472,7 +1472,7 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	}
 	for(const auto &it : actions)
 		// Any requested outfits should be handled by the complete action
-		if(it.first == COMPLETE && OutfitUnits() > 0)
+		if(it.first == COMPLETE && result.RequestedOutfit() && result.OutfitUnits() > 0)
 		{
 			const map<const Outfit *, int> additionalRequiredOutfits = {
 				{result.RequestedOutfit(), result.OutfitUnits() * -1}
