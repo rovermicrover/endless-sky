@@ -1403,7 +1403,8 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	subs["<outfit>"] = OutfitName();
 	subs["<outfit-units>"] = to_string(OutfitUnits());
 	subs["<outfit-tons>"] = to_string(OutfitUnitsMass()) + (OutfitUnitsMass() == 1. ? " ton" : " tons");
-	subs["<outfit-cargo>"] = subs["<outfit-units>"] + " units of " + subs["<outfit>"] + " totaling " + subs["<outfit-tons>"];
+	subs["<outfit-cargo>"] = (subs["<outfit-units>"] + " units of " + subs["<outfit>"] 
+		+ " totaling " + subs["<outfit-tons>"]);
 	subs["<bunks>"] = to_string(result.passengers);
 	subs["<passengers>"] = (result.passengers == 1) ? "passenger" : "passengers";
 	subs["<fare>"] = (result.passengers == 1) ? "a passenger" : (subs["<bunks>"] + " passengers");
