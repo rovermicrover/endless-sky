@@ -1374,7 +1374,7 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 
 	int64_t cargoPayload = static_cast<int64_t>(result.cargoSize);
 	int64_t passengerPayload = 10 * static_cast<int64_t>(result.passengers);
-	int64_t payload = OutfitCostWithBulkBonus() + cargoPayload + passengerPayload;
+	int64_t payload = result.OutfitCostWithBulkBonus() + cargoPayload + passengerPayload;
 
 	// Set the deadline, if requested.
 	if(deadlineBase || deadlineMultiplier)
@@ -1475,7 +1475,7 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 		if(it.first == COMPLETE && OutfitUnits() > 0)
 		{
 			const map<const Outfit *, int> additionalRequiredOutfits = {
-				{RequestedOutfit(), OutfitUnits() * -1}
+				{result.RequestedOutfit(), result.OutfitUnits() * -1}
 			};
 			result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload, additionalRequiredOutfits);
 		}
