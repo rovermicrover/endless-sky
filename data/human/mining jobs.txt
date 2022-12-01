@@ -12,6 +12,8 @@ outfitter "Mining Job Outfitter"
 	"Tungsten"
 	"Uranium"
 
+
+
 phrase "generic mineral payment dialog"
 	word
 		`Your client on <destination>`
@@ -37,19 +39,7 @@ phrase "generic mineral visit dialog"
 	word
 		`<outfit-units> units of <outfit> yet.`
 
-outfitter "Mining Job Outfitter"
-	"Aluminum"
-	"Copper"
-	"Gold"
-	"Iron"
-	"Lead"
-	"Neodymium"
-	"Platinum"
-	"Silicon"
-	"Silver"
-	"Titanium"
-	"Tungsten"
-	"Uranium"
+
 
 mission "Mineral Very Large Bulk Delivery"
 	job
@@ -99,7 +89,7 @@ mission "Mineral Bulk Delivery"
 	destination
 		distance 0
 		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
-	outfitter "Mining Job Outfitter" 50 150
+	outfit "Iron" 50 150
 	to offer
 		random < 30
 	on visit
