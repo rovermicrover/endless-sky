@@ -841,7 +841,7 @@ bool Mission::HasSpace(const PlayerInfo &player) const
 	int extraCrew = 0;
 	if(player.Flagship())
 		extraCrew = player.Flagship()->Crew() - player.Flagship()->RequiredCrew();
-	return ((cargoSize + ceil(OutfitUnitsMass())) <= player.Cargo().Free() + player.Cargo().CommoditiesSize()
+	return (cargoSize <= player.Cargo().Free() + player.Cargo().CommoditiesSize()
 		&& passengers <= player.Cargo().BunksFree() + extraCrew);
 }
 
@@ -850,7 +850,7 @@ bool Mission::HasSpace(const PlayerInfo &player) const
 // Check if this mission's cargo can fit entirely on the referenced ship.
 bool Mission::HasSpace(const Ship &ship) const
 {
-	return ((cargoSize + ceil(OutfitUnitsMass())) <= ship.Cargo().Free() && passengers <= ship.Cargo().BunksFree());
+	return (cargoSize <= ship.Cargo().Free() && passengers <= ship.Cargo().BunksFree());
 }
 
 
@@ -962,7 +962,7 @@ string Mission::BlockedMessage(const PlayerInfo &player)
 	if(flagship && player.GetPlanet())
 		extraCrew = flagship->Crew() - flagship->RequiredCrew();
 
-	int cargoNeeded = cargoSize + ceil(OutfitUnitsMass());
+	int cargoNeeded = cargoSize;
 	int bunksNeeded = passengers;
 	if(player.GetPlanet())
 	{
@@ -1103,6 +1103,9 @@ bool Mission::Do(Trigger trigger, PlayerInfo &player, UI *ui, const shared_ptr<S
 	if(trigger == OFFER && location == JOB)
 		ui = nullptr;
 
+	// If this is a outfit job that is done, ensure that we remove the needed outfits
+	if(trigger == COMPLETE && outfit && outfitUnits)
+		player.Cargo().Remove(outfit, outfitUnits);
 	// If this trigger has actions tied to it, perform them. Otherwise, check
 	// if this is a non-job mission that just got offered and if so,
 	// automatically accept it.
@@ -1116,9 +1119,6 @@ bool Mission::Do(Trigger trigger, PlayerInfo &player, UI *ui, const shared_ptr<S
 		it->second.Do(player, ui, (destination && isVisible) ? destination->GetSystem() : nullptr, boardingShip, IsUnique());
 	else if(trigger == OFFER && location != JOB)
 		player.MissionCallback(Conversation::ACCEPT);
-
-	if(trigger == COMPLETE && outfit && outfitUnits)
-		player.Cargo().Remove(outfit, outfitUnits);
 
 	return true;
 }
@@ -1401,8 +1401,9 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	subs["<tons>"] = to_string(result.cargoSize) + (result.cargoSize == 1 ? " ton" : " tons");
 	subs["<cargo>"] = subs["<tons>"] + " of " + subs["<commodity>"];
 	subs["<outfit>"] = OutfitName();
+	subs["<outfit-units>"] = to_string(OutfitUnits())
 	subs["<outfit-tons>"] = to_string(OutfitUnitsMass()) + (OutfitUnitsMass() == 1. ? " ton" : " tons");
-	subs["<outfit-cargo>"] = subs["<outfit-tons>"] + " of " + subs["<outfit>"];
+	subs["<outfit-cargo>"] = subs["<outfit-units>"] + " " + subs["<outfit>"] + " totaling " + subs["<outfit-tons>"];
 	subs["<bunks>"] = to_string(result.passengers);
 	subs["<passengers>"] = (result.passengers == 1) ? "passenger" : "passengers";
 	subs["<fare>"] = (result.passengers == 1) ? "a passenger" : (subs["<bunks>"] + " passengers");
