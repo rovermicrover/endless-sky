@@ -328,7 +328,7 @@ void MissionAction::Do(PlayerInfo &player, UI *ui, const System *destination,
 
 // Convert this validated template into a populated action.
 MissionAction MissionAction::Instantiate(map<string, string> &subs, const System *origin,
-	int jumps, int64_t payload, const map<const Outfit *, int> &additionalRequiredOutfits) const
+	int jumps, int64_t payload) const
 {
 	MissionAction result;
 	result.trigger = trigger;
@@ -336,15 +336,7 @@ MissionAction MissionAction::Instantiate(map<string, string> &subs, const System
 	// Convert any "distance" specifiers into "near <system>" specifiers.
 	result.systemFilter = systemFilter.SetOrigin(origin);
 
-	// Add any additional required outfits
-	map<const Outfit *, int> mergedRequiredOutfits(requiredOutfits);
-	for(auto &it : additionalRequiredOutfits)
-	{
-		if(mergedRequiredOutfits.count(it.first) == 0)
-			mergedRequiredOutfits[it.first] = 0;
-		mergedRequiredOutfits[it.first] += it.second;
-	}
-	result.requiredOutfits = mergedRequiredOutfits;
+	result.requiredOutfits = requiredOutfits;
 
 	string previousPayment = subs["<payment>"];
 	string previousFine = subs["<fine>"];
