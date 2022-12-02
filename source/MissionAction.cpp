@@ -335,7 +335,7 @@ MissionAction MissionAction::Instantiate(map<string, string> &subs, const System
 	result.system = system;
 	// Convert any "distance" specifiers into "near <system>" specifiers.
 	result.systemFilter = systemFilter.SetOrigin(origin);
-	
+
 	result.requiredOutfits = requiredOutfits;
 
 	string previousPayment = subs["<payment>"];

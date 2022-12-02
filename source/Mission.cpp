@@ -1470,7 +1470,7 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 			+ Identifier() + "\" uses invalid " + std::move(reason));
 		return result;
 	}
-	for(const auto &it : actions) 
+	for(const auto &it : actions)
 	{
 		if(it.first == COMPLETE && result.RequestedOutfit() && result.OutfitUnits() > 0)
 		{
