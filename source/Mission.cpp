@@ -624,18 +624,14 @@ int Mission::OutfitUnits() const
 
 std::string Mission::OutfitName() const
 {
-	if(!outfit)
-		return "";
-	return outfit->TrueName();
+	return outfit ? outfit->TrueName() : "";
 }
 
 
 
 double Mission::OutfitUnitsMass() const
 {
-	if(!outfit)
-		return 0.;
-	return outfitUnits * outfit->Mass();
+	return outfit ? outfitUnits * outfit->Mass() : 0;
 }
 
 
@@ -1292,14 +1288,10 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	}
 	// If outfit is needed, see if we are supposed to replace a generic
 	if(!outfitStr.empty())
-	{
 		result.outfit = GameData::Outfits().Get(outfitStr);
-	}
 	// If outfitter is present select a random outfit from it
 	if(!outfitterStr.empty())
-	{
 		result.outfit = GameData::Outfitters().Get(outfitterStr)->Sample();
-	}
 	// Pick a random cargo amount, if requested.
 	if(cargoSize || cargoLimit)
 	{
@@ -1359,9 +1351,9 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	subs["<tons>"] = to_string(result.cargoSize) + (result.cargoSize == 1 ? " ton" : " tons");
 	subs["<cargo>"] = subs["<tons>"] + " of " + subs["<commodity>"];
 	subs["<outfit>"] = result.OutfitName();
-	subs["<outfit-units>"] = to_string(result.OutfitUnits());
-	subs["<outfit-tons>"] = (to_string(result.OutfitUnitsMassInt())
-		+ (result.OutfitUnitsMassInt() == 1 ? " ton" : " tons"));
+	subs["<outfit-units>"] = to_string(result.outfitUnits);
+	subs["<outfit-tons>"] = to_string(result.OutfitUnitsMassInt())
+		+ (result.OutfitUnitsMassInt() == 1 ? " ton" : " tons");
 	subs["<outfit-cargo>"] = (subs["<outfit-units>"] + " units of " + subs["<outfit>"]
 		+ " totaling " + subs["<outfit-tons>"]);
 	subs["<bunks>"] = to_string(result.passengers);
@@ -1437,17 +1429,15 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	}
 	for(const auto &it : actions)
 	{
-		if(it.first == COMPLETE && result.GetOutfit() && result.OutfitUnits() > 0)
+		if(it.first == COMPLETE && result.outfit && result.outfitUnits > 0)
 		{
 			const map<const Outfit *, int> outfitObjective = {
-				{result.GetOutfit(), result.OutfitUnits()}
+				{result.outfit, result.outfitUnits}
 			};
 			result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload, outfitObjective);
 		}
 		else
-		{
 			result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload);
-		}
 	}
 	auto oit = onEnter.begin();
 	for( ; oit != onEnter.end(); ++oit)
