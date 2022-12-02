@@ -72,7 +72,7 @@ public:
 		const std::map<const Outfit *, int> &outfitObjective = {}) const;
 
 	// Must be "Instantiated"
-	void AddOutfitObjective(const std::map<const Outfit *, int> &outfitObjective) const;
+	void AddOutfitObjective(const std::map<const Outfit *, int> &outfitObjective);
 
 
 private:
