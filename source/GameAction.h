@@ -68,7 +68,8 @@ public:
 
 	// "Instantiate" this action by filling in the wildcard data for the actual
 	// payment, event delay, etc.
-	GameAction Instantiate(std::map<std::string, std::string> &subs, int jumps, int payload) const;
+	GameAction Instantiate(std::map<std::string, std::string> &subs, int jumps, int payload,
+		const std::map<const Outfit *, int> &outfitObjective = {}) const;
 
 
 private:
