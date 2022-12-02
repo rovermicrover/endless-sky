@@ -127,6 +127,23 @@ namespace {
 			message += "flagship.";
 		Messages::Add(message, Messages::Importance::High);
 	}
+
+	double OutfitBulkBonus(int count) const
+	{
+		if(count < 50)
+			return 1.;
+
+		if(count < 100)
+			return 1.1;
+
+		if(count < 250)
+			return 1.25;
+
+		if(count < 500)
+			return 1.5;
+
+		return 2.;
+	}
 }
 
 
@@ -396,15 +413,18 @@ GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int pay
 
 	// Add any additional required outfits
 	map<const Outfit *, int> mergedGiftedOutfits(giftOutfits);
+	int outfitObjectiveCost = 0;
 	for(auto &it : outfitObjective)
 	{
+		outfitObjectiveCost += it.first->Cost() * it.second * OutfitBulkBonus(it.second);
+
 		if(mergedGiftedOutfits.count(it.first) == 0)
 			mergedGiftedOutfits[it.first] = 0;
-		mergedGiftedOutfits[it.first] += it.second;
+		mergedGiftedOutfits[it.first] += -1 * it.second;
 	}
 	result.giftOutfits = mergedGiftedOutfits;
 
-	result.payment = payment + (jumps + 1) * payload * paymentMultiplier;
+	result.payment = payment + outfitObjectiveCost + (jumps + 1) * payload * paymentMultiplier;
 	if(result.payment)
 		subs["<payment>"] = Format::Credits(abs(result.payment))
 			+ (result.payment == 1 ? " credit" : " credits");

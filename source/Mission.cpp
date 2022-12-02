@@ -608,7 +608,7 @@ int Mission::CargoSize() const
 
 
 
-const Outfit *Mission::RequestedOutfit() const
+const Outfit *Mission::GetOutfit() const
 {
 	return outfit;
 }
@@ -643,41 +643,6 @@ double Mission::OutfitUnitsMass() const
 int64_t Mission::OutfitUnitsMassInt() const
 {
 	return static_cast<int64_t>(std::ceil(Mission::OutfitUnitsMass()));
-}
-
-
-
-int64_t Mission::OutfitCost() const
-{
-	if(!outfit)
-		return 0.;
-	return outfitUnits * outfit->Cost();
-}
-
-
-
-double Mission::OutfitBulkBonus() const
-{
-	if(outfitUnits < 50)
-		return 1.;
-
-	if(outfitUnits < 100)
-		return 1.1;
-
-	if(outfitUnits < 250)
-		return 1.25;
-
-	if(outfitUnits < 500)
-		return 1.5;
-
-	return 2.;
-}
-
-
-
-int64_t Mission::OutfitCostWithBulkBonus() const
-{
-	return static_cast<int64_t>(OutfitCost() * OutfitBulkBonus());
 }
 
 
@@ -1374,7 +1339,7 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 
 	int64_t cargoPayload = static_cast<int64_t>(result.cargoSize);
 	int64_t passengerPayload = 10 * static_cast<int64_t>(result.passengers);
-	int64_t payload = result.OutfitCostWithBulkBonus() + cargoPayload + passengerPayload;
+	int64_t payload = cargoPayload + passengerPayload;
 
 	// Set the deadline, if requested.
 	if(deadlineBase || deadlineMultiplier)
@@ -1472,10 +1437,10 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	}
 	for(const auto &it : actions)
 	{
-		if(it.first == COMPLETE && result.RequestedOutfit() && result.OutfitUnits() > 0)
+		if(it.first == COMPLETE && result.GetOutfit() && result.OutfitUnits() > 0)
 		{
 			const map<const Outfit *, int> outfitObjective = {
-				{result.RequestedOutfit(), result.OutfitUnits() * -1}
+				{result.GetOutfit(), result.OutfitUnits()}
 			};
 			result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload, outfitObjective);
 		}

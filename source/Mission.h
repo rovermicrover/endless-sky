@@ -98,14 +98,11 @@ public:
 	const std::set<const Planet *> &VisitedStopovers() const;
 	const std::string &Cargo() const;
 	int CargoSize() const;
-	const Outfit *RequestedOutfit() const;
+	const Outfit *GetOutfit() const;
 	int OutfitUnits() const;
 	std::string OutfitName() const;
 	double OutfitUnitsMass() const;
 	int64_t OutfitUnitsMassInt() const;
-	int64_t OutfitCost() const;
-	double OutfitBulkBonus() const;
-	int64_t OutfitCostWithBulkBonus() const;
 	int IllegalCargoFine() const;
 	std::string IllegalCargoMessage() const;
 	bool FailIfDiscovered() const;
