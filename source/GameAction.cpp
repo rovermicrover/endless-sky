@@ -398,21 +398,9 @@ GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int pay
 
 	for(auto &&it : giftShips)
 		result.giftShips.emplace_back(it.first, !it.second.empty() ? it.second : GameData::Phrases().Get("civilian")->Get());
+	result.giftOutfits = giftOutfits;
 
-	// Add any additional required outfits
-	map<const Outfit *, int> mergedGiftedOutfits(giftOutfits);
-	int outfitObjectiveCost = 0;
-	for(auto &it : outfitObjective)
-	{
-		outfitObjectiveCost += it.first->Cost() * it.second * OutfitBulkBonus(it.second);
-
-		if(!mergedGiftedOutfits.count(it.first))
-			mergedGiftedOutfits[it.first] = 0;
-		mergedGiftedOutfits[it.first] -= it.second;
-	}
-	result.giftOutfits = mergedGiftedOutfits;
-
-	result.payment = payment + outfitObjectiveCost + (jumps + 1) * payload * paymentMultiplier;
+	result.payment = payment + (jumps + 1) * payload * paymentMultiplier;
 	if(result.payment)
 		subs["<payment>"] = Format::Credits(abs(result.payment))
 			+ (result.payment == 1 ? " credit" : " credits");
@@ -434,3 +422,17 @@ GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int pay
 
 	return result;
 }
+
+void MissionAction::AddOutfitObjective(const std::map<const Outfit *, int> &outfitObjective) const
+{
+	int outfitObjectiveCost = 0;
+	for(auto &it : outfitObjective)
+	{
+		outfitObjectiveCost += it.first->Cost() * it.second * OutfitBulkBonus(it.second);
+
+		if(!giftOutfits.count(it.first))
+			giftOutfits[it.first] = 0;
+		giftOutfits[it.first] -= it.second;
+	}
+	payment += outfitObjectiveCost;
+};

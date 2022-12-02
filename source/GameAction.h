@@ -71,6 +71,9 @@ public:
 	GameAction Instantiate(std::map<std::string, std::string> &subs, int jumps, int payload,
 		const std::map<const Outfit *, int> &outfitObjective = {}) const;
 
+	// Must be "Instantiated"
+	void AddOutfitObjective(const std::map<const Outfit *, int> &outfitObjective) const;
+
 
 private:
 	bool isEmpty = true;
