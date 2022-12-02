@@ -381,8 +381,7 @@ void GameAction::Do(PlayerInfo &player, UI *ui) const
 
 
 
-GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int payload,
-		const std::map<const Outfit *, int> &outfitObjective) const
+GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int payload) const
 {
 	GameAction result;
 	result.isEmpty = isEmpty;

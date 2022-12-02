@@ -328,7 +328,7 @@ void MissionAction::Do(PlayerInfo &player, UI *ui, const System *destination,
 
 // Convert this validated template into a populated action.
 MissionAction MissionAction::Instantiate(map<string, string> &subs, const System *origin,
-	int jumps, int64_t payload, const map<const Outfit *, int> &outfitObjective) const
+	int jumps, int64_t payload) const
 {
 	MissionAction result;
 	result.trigger = trigger;
@@ -340,7 +340,7 @@ MissionAction MissionAction::Instantiate(map<string, string> &subs, const System
 
 	string previousPayment = subs["<payment>"];
 	string previousFine = subs["<fine>"];
-	result.action = action.Instantiate(subs, jumps, payload, outfitObjective);
+	result.action = action.Instantiate(subs, jumps, payload);
 
 	// Create any associated dialog text from phrases, or use the directly specified text.
 	string dialogText = !dialogPhrase->IsEmpty() ? dialogPhrase->Get() : this->dialogText;
