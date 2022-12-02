@@ -128,7 +128,7 @@ namespace {
 		Messages::Add(message, Messages::Importance::High);
 	}
 
-	double OutfitBulkBonus(int count) const
+	double OutfitBulkBonus(int count)
 	{
 		if(count < 50)
 			return 1.;
