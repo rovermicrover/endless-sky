@@ -131,7 +131,7 @@ namespace {
 	double OutfitBulkBonus(int count)
 	{
 		if(count < 50)
-			return 1.;
+			return 1.05;
 
 		if(count < 100)
 			return 1.1;
