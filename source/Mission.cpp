@@ -1470,18 +1470,20 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 			+ Identifier() + "\" uses invalid " + std::move(reason));
 		return result;
 	}
-	for(const auto &it : actions)
+	for(const auto &it : actions) 
+	{
 		result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload);
 
 		if(it.first == COMPLETE && result.RequestedOutfit() && result.OutfitUnits() > 0)
 		{
-			dynamicOutfitNode = DataNode();
+			const DataNode dynamicOutfitNode = DataNode();
 			dynamicOutfitNode.tokens.push_back("outfit");
 			dynamicOutfitNode.tokens.push_back(result.OutfitName());
 			dynamicOutfitNode.tokens.push_back(to_string(result.OutfitUnits() * -1));
 
 			result.actions[it.first].action.LoadSingle(dynamicOutfitNode, name);
 		}
+	}
 	auto oit = onEnter.begin();
 	for( ; oit != onEnter.end(); ++oit)
 	{
