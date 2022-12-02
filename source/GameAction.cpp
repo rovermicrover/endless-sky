@@ -406,7 +406,7 @@ GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int pay
 	{
 		outfitObjectiveCost += it.first->Cost() * it.second * OutfitBulkBonus(it.second);
 
-		if(!mergedGiftedOutfits.count(it.first) )
+		if(!mergedGiftedOutfits.count(it.first))
 			mergedGiftedOutfits[it.first] = 0;
 		mergedGiftedOutfits[it.first] += -1 * it.second;
 	}
