@@ -408,7 +408,7 @@ GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int pay
 
 		if(!mergedGiftedOutfits.count(it.first))
 			mergedGiftedOutfits[it.first] = 0;
-		mergedGiftedOutfits[it.first] += -1 * it.second;
+		mergedGiftedOutfits[it.first] -= it.second;
 	}
 	result.giftOutfits = mergedGiftedOutfits;
 
