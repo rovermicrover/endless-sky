@@ -1472,16 +1472,16 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	}
 	for(const auto &it : actions) 
 	{
-		result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload);
-
 		if(it.first == COMPLETE && result.RequestedOutfit() && result.OutfitUnits() > 0)
 		{
-			const DataNode dynamicOutfitNode = DataNode();
-			dynamicOutfitNode.tokens.push_back("outfit");
-			dynamicOutfitNode.tokens.push_back(result.OutfitName());
-			dynamicOutfitNode.tokens.push_back(to_string(result.OutfitUnits() * -1));
-
-			result.actions[it.first].action.LoadSingle(dynamicOutfitNode, name);
+			const map<const Outfit *, int> outfitObjective = {
+				{result.RequestedOutfit(), result.OutfitUnits() * -1}
+			};
+			result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload, outfitObjective);
+		}
+		else
+		{
+			result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload);
 		}
 	}
 	auto oit = onEnter.begin();

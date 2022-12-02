@@ -376,7 +376,8 @@ void GameAction::Do(PlayerInfo &player, UI *ui) const
 
 
 
-GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int payload) const
+GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int payload,
+		const std::map<const Outfit *, int> &outfitObjective) const
 {
 	GameAction result;
 	result.isEmpty = isEmpty;
@@ -392,7 +393,16 @@ GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int pay
 
 	for(auto &&it : giftShips)
 		result.giftShips.emplace_back(it.first, !it.second.empty() ? it.second : GameData::Phrases().Get("civilian")->Get());
-	result.giftOutfits = giftOutfits;
+
+	// Add any additional required outfits
+	map<const Outfit *, int> mergedGiftedOutfits(giftOutfits);
+	for(auto& it : outfitObjective)
+	{
+		if(mergedGiftedOutfits.count(it.first) == 0)
+			mergedGiftedOutfits[it.first] = 0;
+		mergedGiftedOutfits[it.first] += it.second;
+	}
+	result.giftOutfits = mergedGiftedOutfits;
 
 	result.payment = payment + (jumps + 1) * payload * paymentMultiplier;
 	if(result.payment)

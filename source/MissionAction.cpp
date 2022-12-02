@@ -328,19 +328,19 @@ void MissionAction::Do(PlayerInfo &player, UI *ui, const System *destination,
 
 // Convert this validated template into a populated action.
 MissionAction MissionAction::Instantiate(map<string, string> &subs, const System *origin,
-	int jumps, int64_t payload) const
+	int jumps, int64_t payload, const map<const Outfit *, int> &outfitObjective) const
 {
 	MissionAction result;
 	result.trigger = trigger;
 	result.system = system;
 	// Convert any "distance" specifiers into "near <system>" specifiers.
 	result.systemFilter = systemFilter.SetOrigin(origin);
-
+	
 	result.requiredOutfits = requiredOutfits;
 
 	string previousPayment = subs["<payment>"];
 	string previousFine = subs["<fine>"];
-	result.action = action.Instantiate(subs, jumps, payload);
+	result.action = action.Instantiate(subs, jumps, payload, outfitObjective);
 
 	// Create any associated dialog text from phrases, or use the directly specified text.
 	string dialogText = !dialogPhrase->IsEmpty() ? dialogPhrase->Get() : this->dialogText;
