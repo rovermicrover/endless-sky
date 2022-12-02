@@ -396,7 +396,7 @@ GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int pay
 
 	// Add any additional required outfits
 	map<const Outfit *, int> mergedGiftedOutfits(giftOutfits);
-	for(auto& it : outfitObjective)
+	for(auto &it : outfitObjective)
 	{
 		if(mergedGiftedOutfits.count(it.first) == 0)
 			mergedGiftedOutfits[it.first] = 0;
