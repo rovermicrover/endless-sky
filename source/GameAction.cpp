@@ -130,7 +130,7 @@ namespace {
 
 	double OutfitBulkBonus(int count)
 	{
-		return count > 500 ? 2. : 1. + count * 0.01
+		return count > 500 ? 2. : 1. + count * 0.01;
 	}
 }
 
@@ -406,7 +406,7 @@ GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int pay
 	{
 		outfitObjectiveCost += it.first->Cost() * it.second * OutfitBulkBonus(it.second);
 
-		if(mergedGiftedOutfits.count(it.first) == 0)
+		if(!mergedGiftedOutfits.count(it.first) )
 			mergedGiftedOutfits[it.first] = 0;
 		mergedGiftedOutfits[it.first] += -1 * it.second;
 	}
