@@ -328,7 +328,7 @@ void Mission::Load(const DataNode &node)
 	if(hasPriority && location == LANDING)
 		node.PrintTrace("Warning: \"priority\" tag has no effect on \"landing\" missions:");
 	if(!requestedOutfit.empty() && !requestedOutfitter.empty())
-		node.PrintTrace("Warning: both outfit and outfitter being defined is not supported,"
+		node.PrintTrace(string("Warning: both outfit and outfitter being defined is not supported,")
 			+ " and will cause both to use the probabilities defined last:");
 }
 
