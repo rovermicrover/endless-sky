@@ -1429,15 +1429,14 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	}
 	for(const auto &it : actions)
 	{
+		result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload);
 		if(it.first == COMPLETE && result.outfit && result.outfitUnits > 0)
 		{
 			const map<const Outfit *, int> outfitObjective = {
 				{result.outfit, result.outfitUnits}
 			};
-			result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload, outfitObjective);
+			result.actions[it.first].AddOutfitObjective(subs, outfitObjective);
 		}
-		else
-			result.actions[it.first] = it.second.Instantiate(subs, sourceSystem, jumps, payload);
 	}
 	auto oit = onEnter.begin();
 	for( ; oit != onEnter.end(); ++oit)
