@@ -444,4 +444,4 @@ void GameAction::AddOutfitObjective(map<string, string> &subs, const std::map<co
 	}
 	payment += outfitObjectiveCost;
 	subs["<payment>"] = FormattedPayment();
-};
+}
