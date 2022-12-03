@@ -1435,7 +1435,7 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 			const map<const Outfit *, int> outfitObjective = {
 				{result.outfit, result.outfitUnits}
 			};
-			result.actions[it.first].AddOutfitObjective(outfitObjective);
+			result.actions[it.first].AddOutfitObjective(subs, outfitObjective);
 		}
 	}
 	auto oit = onEnter.begin();

@@ -316,6 +316,14 @@ int64_t GameAction::Fine() const noexcept
 
 
 
+std::string GameAction::FormattedPayment() const noexcept
+{
+	return return Format::Credits(abs(payment))
+			+ (payment == 1 ? " credit" : " credits");;
+}
+
+
+
 const map<const Outfit *, int> &GameAction::Outfits() const noexcept
 {
 	return giftOutfits;
@@ -401,8 +409,7 @@ GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int pay
 
 	result.payment = payment + (jumps + 1) * payload * paymentMultiplier;
 	if(result.payment)
-		subs["<payment>"] = Format::Credits(abs(result.payment))
-			+ (result.payment == 1 ? " credit" : " credits");
+		subs["<payment>"] = result.FormattedPayment();
 
 	result.fine = fine;
 	if(result.fine)
@@ -422,7 +429,7 @@ GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int pay
 	return result;
 }
 
-void GameAction::AddOutfitObjective(const std::map<const Outfit *, int> &outfitObjective)
+void GameAction::AddOutfitObjective(map<string, string> &subs, const std::map<const Outfit *, int> &outfitObjective)
 {
 	int outfitObjectiveCost = 0;
 	for(auto &it : outfitObjective)
@@ -434,4 +441,5 @@ void GameAction::AddOutfitObjective(const std::map<const Outfit *, int> &outfitO
 		giftOutfits[it.first] -= it.second;
 	}
 	payment += outfitObjectiveCost;
+	subs["<payment>"] = FormattedPayment();
 };
