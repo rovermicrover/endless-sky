@@ -61,6 +61,7 @@ public:
 
 	int64_t Payment() const noexcept;
 	int64_t Fine() const noexcept;
+	std::string FormattedPayment() const noexcept;
 	const std::map<const Outfit *, int> &Outfits() const noexcept;
 
 	// Perform this action.
@@ -71,7 +72,8 @@ public:
 	GameAction Instantiate(std::map<std::string, std::string> &subs, int jumps, int payload) const;
 
 	// Must be "Instantiated"
-	void AddOutfitObjective(const std::map<const Outfit *, int> &outfitObjective);
+	void AddOutfitObjective(std::map<std::string, std::string> &subs,
+		const std::map<const Outfit *, int> &outfitObjective);
 
 
 private:
