@@ -72,7 +72,7 @@ public:
 	GameAction Instantiate(std::map<std::string, std::string> &subs, int jumps, int payload) const;
 
 	// Must be "Instantiated"
-	void AddOutfitObjective(std::map<std::string, std::string> &subs, 
+	void AddOutfitObjective(std::map<std::string, std::string> &subs,
 		const std::map<const Outfit *, int> &outfitObjective);
 
 

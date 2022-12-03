@@ -69,7 +69,7 @@ public:
 		const System *origin, int jumps, int64_t payload) const;
 
 	// Must be "Instantiated"
-	void AddOutfitObjective(std::map<std::string, std::string> &subs, 
+	void AddOutfitObjective(std::map<std::string, std::string> &subs,
 		const std::map<const Outfit *, int> &outfitObjective);
 
 	int64_t Payment() const noexcept;
