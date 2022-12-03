@@ -181,6 +181,8 @@ void Mission::Load(const DataNode &node)
 		}
 		else if(child.Token(0) == "outfit" && child.Size() >= 3)
 		{
+			if(!outfitStr.empty())
+				node.PrintTrace("Warning: more than one outfit objective, only last one will be used:");
 			outfitStr = child.Token(1);
 			outfitUnits = child.Value(2);
 			if(child.Size() >= 4)
@@ -190,6 +192,8 @@ void Mission::Load(const DataNode &node)
 		}
 		else if(child.Token(0) == "outfitter" && child.Size() >= 3)
 		{
+			if(!outfitterStr.empty())
+				node.PrintTrace("Warning: more than one outfitter objective, only last one will be used:");
 			outfitterStr = child.Token(1);
 			outfitUnits = child.Value(2);
 			if(child.Size() >= 4)
@@ -327,6 +331,8 @@ void Mission::Load(const DataNode &node)
 		displayName = name;
 	if(hasPriority && location == LANDING)
 		node.PrintTrace("Warning: \"priority\" tag has no effect on \"landing\" missions:");
+	if(!outfitStr.empty() && !outfitterStr.empty())
+		node.PrintTrace("Warning: both outfit and outfitter set this will cause unpredictable behavior:");
 }
 
 
