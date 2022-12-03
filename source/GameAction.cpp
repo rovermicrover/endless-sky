@@ -318,8 +318,8 @@ int64_t GameAction::Fine() const noexcept
 
 std::string GameAction::FormattedPayment() const noexcept
 {
-	return return Format::Credits(abs(payment))
-			+ (payment == 1 ? " credit" : " credits");;
+	return Format::Credits(abs(payment))
+		+ (payment == 1 ? " credit" : " credits");
 }
 
 
