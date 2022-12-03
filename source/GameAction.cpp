@@ -429,6 +429,8 @@ GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int pay
 	return result;
 }
 
+
+
 void GameAction::AddOutfitObjective(map<string, string> &subs, const std::map<const Outfit *, int> &outfitObjective)
 {
 	int outfitObjectiveCost = 0;
