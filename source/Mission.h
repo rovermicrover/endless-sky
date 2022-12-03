@@ -224,8 +224,8 @@ private:
 	std::string illegalCargoMessage;
 	bool failIfDiscovered = false;
 	// Parameters for generating random outfit amounts:
-	std::string outfitStr;
-	std::string outfitterStr;
+	std::string requestedOutfit;
+	std::string requestedOutfitter;
 	const Outfit *outfit = nullptr;
 	int outfitUnits = 0;
 	int outfitLimit = 0;

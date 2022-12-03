@@ -181,9 +181,7 @@ void Mission::Load(const DataNode &node)
 		}
 		else if(child.Token(0) == "outfit" && child.Size() >= 3)
 		{
-			if(!outfitStr.empty())
-				node.PrintTrace("Warning: more than one outfit objective, only last one will be used:");
-			outfitStr = child.Token(1);
+			requestedOutfit = child.Token(1);
 			outfitUnits = child.Value(2);
 			if(child.Size() >= 4)
 				outfitLimit = child.Value(3);
@@ -192,9 +190,7 @@ void Mission::Load(const DataNode &node)
 		}
 		else if(child.Token(0) == "outfitter" && child.Size() >= 3)
 		{
-			if(!outfitterStr.empty())
-				node.PrintTrace("Warning: more than one outfitter objective, only last one will be used:");
-			outfitterStr = child.Token(1);
+			requestedOutfitter = child.Token(1);
 			outfitUnits = child.Value(2);
 			if(child.Size() >= 4)
 				outfitLimit = child.Value(3);
@@ -331,7 +327,7 @@ void Mission::Load(const DataNode &node)
 		displayName = name;
 	if(hasPriority && location == LANDING)
 		node.PrintTrace("Warning: \"priority\" tag has no effect on \"landing\" missions:");
-	if(!outfitStr.empty() && !outfitterStr.empty())
+	if(!requestedOutfit.empty() && !requestedOutfitter.empty())
 		node.PrintTrace("Warning: both outfit and outfitter set this will cause unpredictable behavior:");
 }
 
@@ -1293,11 +1289,11 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 			result.cargo = cargo;
 	}
 	// If outfit is needed, see if we are supposed to replace a generic
-	if(!outfitStr.empty())
-		result.outfit = GameData::Outfits().Get(outfitStr);
-	// If outfitter is present select a random outfit from it
-	if(!outfitterStr.empty())
-		result.outfit = GameData::Outfitters().Get(outfitterStr)->Sample();
+	if(!requestedOutfit.empty())
+		result.outfit = GameData::Outfits().Get(requestedOutfit);
+	// If outfitter is present and exists select a random outfit from it
+	if(!requestedOutfitter.empty() && GameData::Outfitters().Has(requestedOutfitter))
+		result.outfit = GameData::Outfitters().Get(requestedOutfitter)->Sample();
 	// Pick a random cargo amount, if requested.
 	if(cargoSize || cargoLimit)
 	{
