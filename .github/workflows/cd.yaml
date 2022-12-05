@@ -174,13 +174,13 @@ jobs:
           https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           if ! github-release info -t continuous > /dev/null 2>&1; then
             github-release release \
-              --tag continuous \
+              --tag mission-shipyard-outfitter \
               --name "Mission Spaceport Outfitter Build" \
               --description "$DESCRIPTION" \
               --pre-release
           else
             github-release edit \
-              --tag continuous \
+              --tag mission-shipyard-outfitter \
               --name "Mission Spaceport Outfitter Build" \
               --description "$DESCRIPTION" \
               --pre-release
