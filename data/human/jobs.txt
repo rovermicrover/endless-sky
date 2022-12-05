@@ -3654,7 +3654,7 @@ mission "Mineral Very Large Bulk Delivery"
 	destination
 		distance 0
 		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
-	outfitter "Mining Job Outfitter" 250 750
+	cargo outfitter "Mining Job Outfitter" 250 750
 	to offer
 		random < 10
 	on visit
@@ -3673,7 +3673,7 @@ mission "Mineral Large Bulk Delivery"
 	destination
 		distance 0
 		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
-	outfitter "Mining Job Outfitter" 100 500
+	cargo outfitter "Mining Job Outfitter" 100 500
 	to offer
 		random < 20
 	on visit
@@ -3692,7 +3692,7 @@ mission "Mineral Bulk Delivery"
 	destination
 		distance 0
 		government "Republic" "Free Worlds" "Syndicate" "Neutral" "Independent"
-	outfitter "Mining Job Outfitter" 50 150
+	cargo outfitter "Mining Job Outfitter" 50 150
 	to offer
 		random < 30
 	on visit
