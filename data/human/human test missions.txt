@@ -1,0 +1,17 @@
+mission "Test Spaceport Mission"
+	spaceport
+	source
+		government "Republic" "Free Worlds" "Syndicate"
+	on offer
+		conversation
+			`THIS IS A SPACEPORT MISSION YO!`
+				decline
+
+mission "Test Spaceport Mission"
+	outfitter
+	source
+		government "Republic" "Free Worlds" "Syndicate"
+	on offer
+		conversation
+			`THIS IS A OUTFITTER MISSION YO!`
+				decline

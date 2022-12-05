@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - mission-spaceport-outfitter-stable
   pull_request:
     types:
       - synchronize
