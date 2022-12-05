@@ -7,6 +7,15 @@ mission "Test Spaceport Mission"
 			`THIS IS A SPACEPORT MISSION YO!`
 				decline
 
+mission "Test Shipyard Mission"
+	shipyard
+	source
+		government "Republic" "Free Worlds" "Syndicate"
+	on offer
+		conversation
+			`THIS IS A SHIPYARD MISSION YO!`
+				decline
+
 mission "Test Spaceport Mission"
 	outfitter
 	source
