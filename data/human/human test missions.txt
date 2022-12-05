@@ -1,5 +1,4 @@
 mission "Test Spaceport Mission"
-	spaceport
 	source
 		government "Republic" "Free Worlds" "Syndicate"
 	on offer
@@ -16,7 +15,7 @@ mission "Test Shipyard Mission"
 			`THIS IS A SHIPYARD MISSION YO!`
 				decline
 
-mission "Test Spaceport Mission"
+mission "Test Outfitter Mission"
 	outfitter
 	source
 		government "Republic" "Free Worlds" "Syndicate"
