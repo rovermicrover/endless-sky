@@ -163,12 +163,33 @@ void Mission::Load(const DataNode &node)
 		}
 		else if(child.Token(0) == "cargo" && child.Size() >= 3)
 		{
-			cargo = child.Token(1);
-			cargoSize = child.Value(2);
-			if(child.Size() >= 4)
-				cargoLimit = child.Value(3);
-			if(child.Size() >= 5)
-				cargoProb = child.Value(4);
+			if(child.Token(1) == "outfit" && child.Size() >= 4)
+			{
+				requestedOutfit = child.Token(2);
+				outfitUnits = child.Value(3);
+				if(child.Size() >= 5)
+					outfitLimit = child.Value(4);
+				if(child.Size() >= 6)
+					outfitProb = child.Value(5);
+			}
+			else if(child.Token(1) == "outfitter" && child.Size() >= 4)
+			{
+				requestedOutfitter = child.Token(2);
+				outfitUnits = child.Value(3);
+				if(child.Size() >= 5)
+					outfitLimit = child.Value(4);
+				if(child.Size() >= 6)
+					outfitProb = child.Value(5);
+			}
+			else if(child.Token(1) != "outfit" && child.Token(1) != "outfitter")
+			{
+				cargo = child.Token(1);
+				cargoSize = child.Value(2);
+				if(child.Size() >= 4)
+					cargoLimit = child.Value(3);
+				if(child.Size() >= 5)
+					cargoProb = child.Value(4);
+			}
 
 			for(const DataNode &grand : child)
 			{
@@ -178,28 +199,6 @@ void Mission::Load(const DataNode &node)
 					grand.PrintTrace("Warning: Deprecated use of \"stealth\" and \"illegal\" as a child of \"cargo\"."
 						" They are now mission-level properties:");
 			}
-		}
-		else if(child.Token(0) == "outfit" && child.Size() >= 3)
-		{
-			if(!outfitStr.empty())
-				node.PrintTrace("Warning: more than one outfit objective, only last one will be used:");
-			outfitStr = child.Token(1);
-			outfitUnits = child.Value(2);
-			if(child.Size() >= 4)
-				outfitLimit = child.Value(3);
-			if(child.Size() >= 5)
-				outfitProb = child.Value(4);
-		}
-		else if(child.Token(0) == "outfitter" && child.Size() >= 3)
-		{
-			if(!outfitterStr.empty())
-				node.PrintTrace("Warning: more than one outfitter objective, only last one will be used:");
-			outfitterStr = child.Token(1);
-			outfitUnits = child.Value(2);
-			if(child.Size() >= 4)
-				outfitLimit = child.Value(3);
-			if(child.Size() >= 5)
-				outfitProb = child.Value(4);
 		}
 		else if(child.Token(0) == "passengers" && child.Size() >= 2)
 		{
@@ -331,8 +330,9 @@ void Mission::Load(const DataNode &node)
 		displayName = name;
 	if(hasPriority && location == LANDING)
 		node.PrintTrace("Warning: \"priority\" tag has no effect on \"landing\" missions:");
-	if(!outfitStr.empty() && !outfitterStr.empty())
-		node.PrintTrace("Warning: both outfit and outfitter set this will cause unpredictable behavior:");
+	if(!requestedOutfit.empty() && !requestedOutfitter.empty())
+		node.PrintTrace(string("Warning: both outfit and outfitter being defined is not supported,")
+			+ " and will cause both to use the probabilities defined last:");
 }
 
 
@@ -1293,11 +1293,11 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 			result.cargo = cargo;
 	}
 	// If outfit is needed, see if we are supposed to replace a generic
-	if(!outfitStr.empty())
-		result.outfit = GameData::Outfits().Get(outfitStr);
-	// If outfitter is present select a random outfit from it
-	if(!outfitterStr.empty())
-		result.outfit = GameData::Outfitters().Get(outfitterStr)->Sample();
+	if(!requestedOutfit.empty())
+		result.outfit = GameData::Outfits().Get(requestedOutfit);
+	// If outfitter is present and exists select a random outfit from it
+	if(!requestedOutfitter.empty() && GameData::Outfitters().Has(requestedOutfitter))
+		result.outfit = GameData::Outfitters().Get(requestedOutfitter)->Sample();
 	// Pick a random cargo amount, if requested.
 	if(cargoSize || cargoLimit)
 	{
