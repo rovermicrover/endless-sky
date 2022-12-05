@@ -19,7 +19,7 @@ jobs:
   cd_ubuntu_x86_64:
     runs-on: ubuntu-latest
     env:
-      OUTPUT: endless-sky-x86_64-continuous.tar.gz
+      OUTPUT: endless-sky-x86_64-shipyard-outfitter.tar.gz
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       ARCH: x86_64
-      OUTPUT: endless-sky-x86_64-continuous.AppImage
+      OUTPUT: endless-sky-x86_64-shipyard-outfitter.AppImage
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
@@ -72,7 +72,7 @@ jobs:
     env:
       DIR_MINGW64: C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64
       DIR_ESLIB: .\dev64
-      OUTPUT: EndlessSky-win64-continuous.zip
+      OUTPUT: EndlessSky-win64-shipyard-outfitter.zip
       AR: gcc-ar
     steps:
       - uses: actions/checkout@v2
@@ -108,7 +108,7 @@ jobs:
   cd_macos_x86_64:
     runs-on: macos-latest
     env:
-      OUTPUT: EndlessSky-macOS-continuous.zip
+      OUTPUT: EndlessSky-macOS-shipyard-outfitter.zip
       SDL2_FRAMEWORK: build/SDL2.framework
     steps:
       - uses: actions/checkout@v2
@@ -146,10 +146,10 @@ jobs:
       - cd_macos_x86_64
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      OUTPUT_UBUNTU: endless-sky-x86_64-continuous.tar.gz
-      OUTPUT_APPIMAGE: endless-sky-x86_64-continuous.AppImage
-      OUTPUT_WINDOWS: EndlessSky-win64-continuous.zip
-      OUTPUT_MACOS: EndlessSky-macOS-continuous.zip
+      OUTPUT_UBUNTU: endless-sky-x86_64-shipyard-outfitter.tar.gz
+      OUTPUT_APPIMAGE: endless-sky-x86_64-shipyard-outfitter.AppImage
+      OUTPUT_WINDOWS: EndlessSky-win64-shipyard-outfitter.zip
+      OUTPUT_MACOS: EndlessSky-macOS-shipyard-outfitter.zip
     steps:
       - uses: actions/checkout@v2
       - name: Install github-release
@@ -169,19 +169,19 @@ jobs:
         run: |
           DESCRIPTION="Triggered on $(date -u '+%Y/%m/%d, %H:%M') UTC by commit ${{ github.sha }} (@${{ github.actor }})
 
-          This is an automated build of the latest source. It may be unstable or even crash, corrupt your save or eat your kitten. Use with caution!
+          This is an automated build of the latest mission-spaceport-outfitter-stable branch. It may be unstable or even crash, corrupt your save or eat your kitten. Use with caution!
 
           https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           if ! github-release info -t continuous > /dev/null 2>&1; then
             github-release release \
               --tag continuous \
-              --name "Continuous Build" \
+              --name "Mission Spaceport Outfitter Build" \
               --description "$DESCRIPTION" \
               --pre-release
           else
             github-release edit \
               --tag continuous \
-              --name "Continuous Build" \
+              --name "Mission Spaceport Outfitter Build" \
               --description "$DESCRIPTION" \
               --pre-release
           fi
