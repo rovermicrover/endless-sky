@@ -163,12 +163,32 @@ void Mission::Load(const DataNode &node)
 		}
 		else if(child.Token(0) == "cargo" && child.Size() >= 3)
 		{
-			cargo = child.Token(1);
-			cargoSize = child.Value(2);
-			if(child.Size() >= 4)
-				cargoLimit = child.Value(3);
-			if(child.Size() >= 5)
-				cargoProb = child.Value(4);
+			if(child.Token(1) == "outfit" && child.Size() >= 4)
+			{
+				requestedOutfit = child.Token(2);
+				outfitUnits = child.Value(3);
+				if(child.Size() >= 5)
+					outfitLimit = child.Value(4);
+				if(child.Size() >= 6)
+					outfitProb = child.Value(5);
+			}
+			else if(child.Token(1) == "outfitter" && child.Size() >= 4)
+			{
+				requestedOutfitter = child.Token(2);
+				outfitUnits = child.Value(3);
+				if(child.Size() >= 5)
+					outfitLimit = child.Value(4);
+				if(child.Size() >= 6)
+					outfitProb = child.Value(5);
+			} 
+			else if(child.Token(1) != "outfit" && child.Token(1) != "outfitter") {
+				cargo = child.Token(1);
+				cargoSize = child.Value(2);
+				if(child.Size() >= 4)
+					cargoLimit = child.Value(3);
+				if(child.Size() >= 5)
+					cargoProb = child.Value(4);
+			}
 
 			for(const DataNode &grand : child)
 			{
@@ -178,24 +198,6 @@ void Mission::Load(const DataNode &node)
 					grand.PrintTrace("Warning: Deprecated use of \"stealth\" and \"illegal\" as a child of \"cargo\"."
 						" They are now mission-level properties:");
 			}
-		}
-		else if(child.Token(0) == "outfit" && child.Size() >= 3)
-		{
-			requestedOutfit = child.Token(1);
-			outfitUnits = child.Value(2);
-			if(child.Size() >= 4)
-				outfitLimit = child.Value(3);
-			if(child.Size() >= 5)
-				outfitProb = child.Value(4);
-		}
-		else if(child.Token(0) == "outfitter" && child.Size() >= 3)
-		{
-			requestedOutfitter = child.Token(1);
-			outfitUnits = child.Value(2);
-			if(child.Size() >= 4)
-				outfitLimit = child.Value(3);
-			if(child.Size() >= 5)
-				outfitProb = child.Value(4);
 		}
 		else if(child.Token(0) == "passengers" && child.Size() >= 2)
 		{
