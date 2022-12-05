@@ -180,7 +180,7 @@ void Mission::Load(const DataNode &node)
 					outfitLimit = child.Value(4);
 				if(child.Size() >= 6)
 					outfitProb = child.Value(5);
-			} 
+			}
 			else if(child.Token(1) != "outfit" && child.Token(1) != "outfitter") {
 				cargo = child.Token(1);
 				cargoSize = child.Value(2);
