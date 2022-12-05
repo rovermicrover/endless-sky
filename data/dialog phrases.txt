@@ -141,8 +141,8 @@ phrase "generic mineral payment dialog"
 	word
 		`pays you <payment> for helping to`
 	word
-		` delivering `
-		` procuring `
+		` deliver `
+		` procure `
 	word
 		`the requested `
 	word
@@ -152,7 +152,7 @@ phrase "generic mineral visit dialog"
 	word
 		`You arrived at <destination>, `
 	word
-		`but you don't have the `
-		`you have yet to mine the `
+		`but you don't have `
+		`you have yet to mine `
 	word
 		`<outfit-units> units of <outfit> yet.`
