@@ -243,3 +243,29 @@ mission "Kor Efreti to Wanderers: Farming"
 	on complete
 		payment 10000 200
 		dialog `When you return, the Korath move their hands in a circular motion with their palms toward you as a sign of gratitude. They hand you <payment> and disembark your ship.`
+
+mission "Kor Efreti: Dangerous Waste Disposal"
+	name "Escort Wander To Dispose Of Dangerous Waste In <waypoints>"
+	job
+	repeat
+	description "Escort a Wander freighter to dump dangerous waste into <waypoints> for the Kor Efreti. Payment is <payment>."
+	to offer
+		has "Wanderers: Sestor: Final: done"
+		random < 50
+	source
+		government "Kor Efret"
+	npc accompany save
+		government "Wanderer"
+		personality escort timid
+		fleet
+			names "wanderer"
+			variant
+				"Deep River (Jump)"
+	waypoint "Sagittarius A*"
+	on visit
+		dialog "You have yet to dump the dangerous waste yet into <waypoints>. Return when you have done so."
+	on waypoint
+		dialog "The Wander ship opens up its cargo bay doors and dumps out the hazardous waste into the black hole. You now need to get out of here before your fuel runs out."
+	on complete
+		payment 200000
+		dialog `When you return, the Korath move their hands in a circular motion with their palms toward you as a sign of gratitude. They hand your payment of <payment>.`

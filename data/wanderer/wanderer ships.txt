@@ -866,6 +866,21 @@ ship "Deep River"
 	"final explode" "final explosion large"
 	description "The Deep River is a modular freighter, designed to carry cargo in detachable pods."
 
+ship "Deep River" "Deep River (Jump)"
+	sprite "ship/deep river"
+	outfits
+		"Thunderhead Launcher" 6
+		"Thunderhead Missile" 320
+		"Thunderhead Storage Array" 4
+		
+		"Large Biochemical Cell"
+		"Bright Cloud Shielding"
+		"Wanderer Ramscoop"
+		
+		"Type 2 Radiant Thruster"
+		"Type 3 Radiant Steering"
+		"Jump Drive"
+
 ship "Deep River" "Deep River 0"
 	sprite "ship/deep river 0"
 	add attributes
