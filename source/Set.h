@@ -75,7 +75,7 @@ const Type *Set<Type>::Sample() const
 	if(this->size() == 0)
 		return nullptr;
 
-	return *(std::next(this->begin(), Random::Int(this->size()))->second);
+	return &(std::next(this->begin(), Random::Int(this->size()))->second);
 }
 
 
