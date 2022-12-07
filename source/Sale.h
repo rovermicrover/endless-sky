@@ -79,7 +79,7 @@ bool Sale<Item>::Has(const Item *item) const
 template <class Item>
 const Item *Sale<Item>::Sample() const
 {
-	return std::next(this->begin(), Random::Int(this->size()));
+	return *std::next(this->begin(), Random::Int(this->size()));
 }
 
 #endif
