@@ -61,7 +61,7 @@ MissionCargoObjective::MissionCargoObjective(const DataNode &node, const int off
 
 // Pick a random commodity that would make sense to be exported from the
 // first system to the second.
-static const Trade::Commodity *MissionCargoObjective::PickCommodity(const System &from, const System &to)
+const Trade::Commodity *MissionCargoObjective::PickCommodity(const System &from, const System &to)
 {
 	std::vector<int> weight;
 	int total = 0;
