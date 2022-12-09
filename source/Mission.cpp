@@ -145,7 +145,7 @@ void Mission::Load(const DataNode &node)
 			}
 			else if(child.Token(1) != "outfit" && child.Token(1) != "outfitter")
 			{
-				cargo = new MissionCargoObjective(child, 0);
+				cargoObjective = new MissionCargoObjective(child, 0);
 			}
 
 			for(const DataNode &grand : child)

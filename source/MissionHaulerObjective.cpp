@@ -54,7 +54,8 @@ bool MissionHaulerObjective::CanBeRealized() const
 
 
 
-MissionCargoObjective::MissionCargoObjective(const DataNode &node, const int offset): MissionHaulerObjective(node, offset);
+MissionCargoObjective::MissionCargoObjective(const DataNode &node, const int offset):
+	MissionHaulerObjective(node, offset);
 
 // Pick a random commodity that would make sense to be exported from the
 // first system to the second.
@@ -112,7 +113,8 @@ string MissionCargoObjective::RealizeCargo(const System &from, const System &to)
 
 
 
-MissionOutfitObjective::MissionOutfitObjective(const DataNode &node, const int offset): MissionHaulerObjective(node, offset);
+MissionOutfitObjective::MissionOutfitObjective(const DataNode &node, const int offset):
+	MissionHaulerObjective(node, offset);
 
 Outfit *MissionOutfitObjective::RealizeOutfit() const
 {
@@ -126,7 +128,8 @@ bool MissionOutfitObjective::CanBeRealized() const
 
 
 
-MissionOutfitterObjective::MissionOutfitterObjective(const DataNode &node, const int offset): MissionHaulerObjective(node, offset);
+MissionOutfitterObjective::MissionOutfitterObjective(const DataNode &node, const int offset):
+	MissionHaulerObjective(node, offset);
 
 Outfit *MissionOutfitterObjective::RealizeOutfit() const
 {
