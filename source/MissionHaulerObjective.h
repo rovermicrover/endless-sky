@@ -44,12 +44,12 @@ private:
 
 class MissionOutfitObjective : public MissionHaulerObjective {
 public:
-	MissionCargoObjective(const DataNode &node, const int offset);
+	MissionOutfitObjective(const DataNode &node, const int offset);
 	Outfit *RealizeOutfit() const;
 };
 
 class MissionOutfitterObjective : public MissionHaulerObjective {
 public:
-	MissionCargoObjective(const DataNode &node, const int offset);
+	MissionOutfitterObjective(const DataNode &node, const int offset);
 	Outfit *RealizeOutfit() const;
 };
