@@ -1228,19 +1228,19 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 
 	// If cargo is being carried, see if we are supposed to replace a generic
 	// cargo name with something more specific.
-	if(cargoObjective && cargoObjective.CanBeRealized())
+	if(cargoObjective.CanBeRealized())
 	{
 		result.cargo = cargoObjective.RealizeCargo(*sourceSystem, *result.destination->GetSystem());
 		result.cargoSize = cargoObjective.RealizeCount();
 	}
 	// If outfit is needed, see if we are supposed to replace a generic
-	if(outfitObjective && outfitObjective.CanBeRealized())
+	if(outfitObjective.CanBeRealized())
 	{
 		result.outfit = outfitObjective.RealizeOutfit();
 		result.outfitUnits = outfitObjective.RealizeCount();
 	}
 	// If outfitter is present and exists select a random outfit from it
-	if(outfitterObjective && outfitterObjective.CanBeRealized())
+	if(outfitterObjective.CanBeRealized())
 	{
 		result.outfit = outfitterObjective.RealizeOutfit();
 		result.outfitUnits = outfitterObjective.RealizeCount();
