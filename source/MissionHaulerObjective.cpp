@@ -29,12 +29,12 @@ MissionHaulerObjective::MissionHaulerObjective(const DataNode &node, const int o
 // Load a mission, either from the game data or from a saved game.
 void MissionHaulerObjective::Load(const DataNode &node, const int offset)
 {
-	id = child.Value(1 + offset);
-	count = child.Value(2 + offset);
-	if(child.Size() >= (4 + offset))
-		limit = child.Value(3 + offset);
-	if(child.Size() >= (5 + offset))
-		probability = child.Value(4 + offset);
+	id = node.Value(1 + offset);
+	count = node.Value(2 + offset);
+	if(node.Size() >= (4 + offset))
+		limit = node.Value(3 + offset);
+	if(node.Size() >= (5 + offset))
+		probability = node.Value(4 + offset);
 }
 
 int MissionHaulerObjective::RealizeCount() const
@@ -55,7 +55,7 @@ bool MissionHaulerObjective::CanBeRealized() const
 
 
 MissionCargoObjective::MissionCargoObjective(const DataNode &node, const int offset):
-	MissionHaulerObjective(node, offset);
+	MissionHaulerObjective(node, offset) {};
 
 // Pick a random commodity that would make sense to be exported from the
 // first system to the second.
@@ -85,7 +85,7 @@ static Trade::Commodity *MissionCargoObjective::PickCommodity(const System &from
 	return nullptr;
 }
 
-string MissionCargoObjective::RealizeCargo(const System &from, const System &to) const
+std::string MissionCargoObjective::RealizeCargo(const System &from, const System &to) const
 {
 	const Trade::Commodity *commodity = nullptr;
 	if(id == "random")
@@ -114,7 +114,7 @@ string MissionCargoObjective::RealizeCargo(const System &from, const System &to)
 
 
 MissionOutfitObjective::MissionOutfitObjective(const DataNode &node, const int offset):
-	MissionHaulerObjective(node, offset);
+	MissionHaulerObjective(node, offset) {};
 
 Outfit *MissionOutfitObjective::RealizeOutfit() const
 {
@@ -129,7 +129,7 @@ bool MissionOutfitObjective::CanBeRealized() const
 
 
 MissionOutfitterObjective::MissionOutfitterObjective(const DataNode &node, const int offset):
-	MissionHaulerObjective(node, offset);
+	MissionHaulerObjective(node, offset) {};
 
 Outfit *MissionOutfitterObjective::RealizeOutfit() const
 {

@@ -15,6 +15,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "DataNode.h"
 #include "Outfit.h"
+#include "System.h"
 #include "Trade.h"
 
 #include <string>
@@ -27,7 +28,7 @@ public:
 	void Load(const DataNode &node, const int offset);
 	bool CanBeRealized() const;
 	int RealizeCount() const;
-private:
+protected:
 	std::string id;
 	int count = 0;
 	int limit = 0;
@@ -45,11 +46,11 @@ private:
 class MissionOutfitObjective : public MissionHaulerObjective {
 public:
 	MissionOutfitObjective(const DataNode &node, const int offset);
-	Outfit *RealizeOutfit() const;
+	const Outfit *RealizeOutfit() const;
 };
 
 class MissionOutfitterObjective : public MissionHaulerObjective {
 public:
 	MissionOutfitterObjective(const DataNode &node, const int offset);
-	Outfit *RealizeOutfit() const;
+	const Outfit *RealizeOutfit() const;
 };
