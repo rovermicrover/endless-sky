@@ -2860,7 +2860,7 @@ bool AI::TargetInRange(const Ship &ship, const Hardpoint &hardpoint)
 {
 	shared_ptr<const Body> shipTarget = ship.GetTargetShip();
 	shared_ptr<const Body> targetAsteroid = ship.GetTargetAsteroid();
-	shared_ptr<const Body> target = shipTarget ?: targetAsteroid;
+	shared_ptr<const Body> target = shipTarget ? shipTarget : targetAsteroid;
 
 	if(!target)
 		return false;
@@ -3291,6 +3291,7 @@ void AI::MovePlayer(Ship &ship, const PlayerInfo &player, Command &activeCommand
 	firingCommands.SetHardpoints(ship.Weapons().size());
 
 	bool shift = activeCommands.Has(Command::SHIFT);
+	bool ctrl = activeCommands.Has(Command::CTRL);
 
 	bool isWormhole = false;
 	if(player.HasTravelPlan())
@@ -3743,7 +3744,7 @@ void AI::MovePlayer(Ship &ship, const PlayerInfo &player, Command &activeCommand
 			for(const Hardpoint &hardpoint : ship.Weapons())
 			{
 				if(hardpoint.IsReady() && !hardpoint.GetOutfit()->Icon()
-						&& (!shift || TargetInRange(ship, hardpoint)))
+						&& (!ctrl || TargetInRange(ship, hardpoint)))
 					firingCommands.SetFire(index);
 				++index;
 			}
