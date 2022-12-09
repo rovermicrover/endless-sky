@@ -35,14 +35,14 @@ class MissionHaulerObjective {
 };
 
 class MissionCargoObjective : MissionHaulerObjective {
-	static Trade::Commodity PickCommodity(const System &from, const System &to)
-	string RealizeCargo(const System &from, const System &to) const;
-}
+	static Trade::Commodity PickCommodity(const System &from, const System &to);
+	std::string RealizeCargo(const System &from, const System &to) const;
+};
 
 class MissionOutfitObjective : MissionHaulerObjective {
 	Outfit RealizeOutfit() const;
-}
+};
 
 class MissionOutfitterObjective : MissionHaulerObjective {
 	Outfit RealizeOutfit() const;
-}
+};
