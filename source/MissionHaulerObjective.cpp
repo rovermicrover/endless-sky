@@ -31,7 +31,7 @@ MissionHaulerObjective::MissionHaulerObjective(const DataNode &node, const int o
 // Load a mission, either from the game data or from a saved game.
 void MissionHaulerObjective::Load(const DataNode &node, const int offset)
 {
-	id = node.Value(1 + offset) + " With an offset of " + std::to_string(offset);
+	id = node.Token(1 + offset);
 	count = node.Value(2 + offset);
 	if(node.Size() >= (4 + offset))
 		limit = node.Value(3 + offset);
