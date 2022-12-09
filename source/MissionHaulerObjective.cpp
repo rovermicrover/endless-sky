@@ -70,7 +70,7 @@ static const Trade::Commodity *MissionCargoObjective::PickCommodity(const System
 		// For every 100 credits in profit you can make, double the chance
 		// of this commodity being chosen.
 		double profit = to.Trade(commodity.name) - from.Trade(commodity.name);
-		int w = max<int>(1, 100. * pow(2., profit * .01));
+		int w = std::max<int>(1, 100. * pow(2., profit * .01));
 		weight.push_back(w);
 		total += w;
 	}
@@ -118,7 +118,7 @@ std::string MissionCargoObjective::RealizeCargo(const System &from, const System
 MissionOutfitObjective::MissionOutfitObjective(const DataNode &node, const int offset):
 	MissionHaulerObjective(node, offset) {};
 
-Outfit *MissionOutfitObjective::RealizeOutfit() const
+const Outfit *MissionOutfitObjective::RealizeOutfit() const
 {
 	return GameData::Outfits().Get(id);
 }
@@ -133,7 +133,7 @@ bool MissionOutfitObjective::CanBeRealized() const
 MissionOutfitterObjective::MissionOutfitterObjective(const DataNode &node, const int offset):
 	MissionHaulerObjective(node, offset) {};
 
-Outfit *MissionOutfitterObjective::RealizeOutfit() const
+const Outfit *MissionOutfitterObjective::RealizeOutfit() const
 {
 	return GameData::Outfitters().Get(id)->Sample();
 }
