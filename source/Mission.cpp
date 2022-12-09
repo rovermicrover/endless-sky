@@ -1254,19 +1254,19 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 	// cargo name with something more specific.
 	if(cargoObjective && cargoObjective->CanBeRealized())
 	{
-		result.cargo = cargoObjective->RealizedCargo(*sourceSystem, *result.destination->GetSystem());
+		result.cargo = cargoObjective->RealizeCargo(*sourceSystem, *result.destination->GetSystem());
 		result.cargoSize = cargoObjective->RealizeCount();
 	}
 	// If outfit is needed, see if we are supposed to replace a generic
 	if(outfitObjective && outfitObjective->CanBeRealized())
 	{
-		result.outfit = outfitObjective->RealizedOutfit();
+		result.outfit = outfitObjective->RealizeOutfit();
 		result.outfitUnits = outfitObjective->RealizeCount();
 	}
 	// If outfitter is present and exists select a random outfit from it
 	if(outfitterObjective && outfitterObjective->CanBeRealized())
 	{
-		result.outfit = outfitterObjective->RealizedOutfit();
+		result.outfit = outfitterObjective->RealizeOutfit();
 		result.outfitUnits = outfitterObjective->RealizeCount();
 	}
 	// Pick a random passenger count, if requested.
