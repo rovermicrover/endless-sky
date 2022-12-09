@@ -40,7 +40,7 @@ public:
 	MissionCargoObjective(const DataNode &node, const int offset);
 	std::string RealizeCargo(const System &from, const System &to) const;
 private:
-	static Trade::Commodity *PickCommodity(const System &from, const System &to);
+	static const Trade::Commodity *PickCommodity(const System &from, const System &to);
 };
 
 class MissionOutfitObjective : public MissionHaulerObjective {

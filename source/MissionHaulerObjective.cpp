@@ -18,7 +18,9 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "GameData.h"
 #include "Random.h"
 
+#include <cmath>
 #include <string>
+#include <vector>
 
 // Construct and Load() at the same time.
 MissionHaulerObjective::MissionHaulerObjective(const DataNode &node, const int offset)
@@ -59,9 +61,9 @@ MissionCargoObjective::MissionCargoObjective(const DataNode &node, const int off
 
 // Pick a random commodity that would make sense to be exported from the
 // first system to the second.
-static Trade::Commodity *MissionCargoObjective::PickCommodity(const System &from, const System &to)
+static const Trade::Commodity *MissionCargoObjective::PickCommodity(const System &from, const System &to)
 {
-	vector<int> weight;
+	std::vector<int> weight;
 	int total = 0;
 	for(const Trade::Commodity &commodity : GameData::Commodities())
 	{
