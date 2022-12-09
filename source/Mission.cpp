@@ -40,34 +40,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 using namespace std;
 
 namespace {
-	// Pick a random commodity that would make sense to be exported from the
-	// first system to the second.
-	const Trade::Commodity *PickCommodity(const System &from, const System &to)
-	{
-		vector<int> weight;
-		int total = 0;
-		for(const Trade::Commodity &commodity : GameData::Commodities())
-		{
-			// For every 100 credits in profit you can make, double the chance
-			// of this commodity being chosen.
-			double profit = to.Trade(commodity.name) - from.Trade(commodity.name);
-			int w = max<int>(1, 100. * pow(2., profit * .01));
-			weight.push_back(w);
-			total += w;
-		}
-		total += !total;
-		// Pick a random commodity based on those weights.
-		int r = Random::Int(total);
-		for(unsigned i = 0; i < weight.size(); ++i)
-		{
-			r -= weight[i];
-			if(r < 0)
-				return &GameData::Commodities()[i];
-		}
-		// Control will never reach here, but to satisfy the compiler:
-		return nullptr;
-	}
-
 	// If a source, destination, waypoint, or stopover supplies more than one explicit choice
 	// or a mixture of explicit choice and location filter, print a warning.
 	void ParseMixedSpecificity(const DataNode &node, string &&kind, int expected)

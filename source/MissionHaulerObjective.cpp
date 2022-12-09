@@ -52,6 +52,10 @@ bool MissionHaulerObjective::CanBeRealized() const
 	return !id.empty() && count > 0;
 }
 
+
+
+MissionCargoObjective::MissionCargoObjective(const DataNode &node, const int offset): MissionHaulerObjective(node, offset);
+
 // Pick a random commodity that would make sense to be exported from the
 // first system to the second.
 static Trade::Commodity *MissionCargoObjective::PickCommodity(const System &from, const System &to)
@@ -106,21 +110,27 @@ string MissionCargoObjective::RealizeCargo(const System &from, const System &to)
 		return id;
 }
 
+
+
+MissionOutfitObjective::MissionOutfitObjective(const DataNode &node, const int offset): MissionHaulerObjective(node, offset);
+
 Outfit *MissionOutfitObjective::RealizeOutfit() const
 {
 	return GameData::Outfits().Get(id);
 }
 
+bool MissionOutfitObjective::CanBeRealized() const
+{
+	return MissionHaulerObjective::CanBeRealized() && GameData::Outfits().Has(id);
+}
+
+
+
+MissionOutfitterObjective::MissionOutfitterObjective(const DataNode &node, const int offset): MissionHaulerObjective(node, offset);
 
 Outfit *MissionOutfitterObjective::RealizeOutfit() const
 {
 	return GameData::Outfitters().Get(id)->Sample();
-}
-
-
-bool MissionOutfitObjective::CanBeRealized() const
-{
-	return MissionHaulerObjective::CanBeRealized() && GameData::Outfits().Has(id);
 }
 
 
