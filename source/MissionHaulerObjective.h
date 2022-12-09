@@ -21,10 +21,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 class MissionHaulerObjective {
 	// Construct and Load() at the same time.
-	MissionCargoObjective(const DataNode &node);
-	static bool MissionCargoObjective::Validate(const DataNode &node, const int offset);
-	void Load(const DataNode &node);
-	static Trade::Commodity PickCommodity(const System &from, const System &to);
+	MissionHaulerObjective(const DataNode &node, const int offset);
+	void Load(const DataNode &node, const int offset);
 	bool CanBeRealized() const;
 	int RealizeCount() const;
 
