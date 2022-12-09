@@ -38,15 +38,15 @@ class MissionCargoObjective : public MissionHaulerObjective {
 public:
 	std::string RealizeCargo(const System &from, const System &to) const;
 private:
-	static Trade::Commodity PickCommodity(const System &from, const System &to);
+	static Trade::Commodity *PickCommodity(const System &from, const System &to);
 };
 
 class MissionOutfitObjective : public MissionHaulerObjective {
 public:
-	Outfit RealizeOutfit() const;
+	Outfit *RealizeOutfit() const;
 };
 
 class MissionOutfitterObjective : public MissionHaulerObjective {
 public:
-	Outfit RealizeOutfit() const;
+	Outfit *RealizeOutfit() const;
 };

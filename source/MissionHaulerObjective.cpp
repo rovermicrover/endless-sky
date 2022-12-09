@@ -54,7 +54,7 @@ bool MissionHaulerObjective::CanBeRealized() const
 
 // Pick a random commodity that would make sense to be exported from the
 // first system to the second.
-static Trade::Commodity MissionCargoObjective::PickCommodity(const System &from, const System &to)
+static Trade::Commodity *MissionCargoObjective::PickCommodity(const System &from, const System &to)
 {
 	vector<int> weight;
 	int total = 0;
@@ -106,13 +106,13 @@ string MissionCargoObjective::RealizeCargo(const System &from, const System &to)
 		return id;
 }
 
-Outfit MissionOutfitObjective::RealizeOutfit() const
+Outfit *MissionOutfitObjective::RealizeOutfit() const
 {
 	return GameData::Outfits().Get(id);
 }
 
 
-Outfit MissionOutfitterObjective::RealizeOutfit() const
+Outfit *MissionOutfitterObjective::RealizeOutfit() const
 {
 	return GameData::Outfitters().Get(id)->Sample();
 }
