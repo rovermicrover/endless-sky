@@ -34,19 +34,19 @@ private:
 	double probability = 0.;
 };
 
-class MissionCargoObjective : MissionHaulerObjective {
+class MissionCargoObjective : public MissionHaulerObjective {
 public:
 	std::string RealizeCargo(const System &from, const System &to) const;
 private:
 	static Trade::Commodity PickCommodity(const System &from, const System &to);
 };
 
-class MissionOutfitObjective : MissionHaulerObjective {
+class MissionOutfitObjective : public MissionHaulerObjective {
 public:
 	Outfit RealizeOutfit() const;
 };
 
-class MissionOutfitterObjective : MissionHaulerObjective {
+class MissionOutfitterObjective : public MissionHaulerObjective {
 public:
 	Outfit RealizeOutfit() const;
 };
