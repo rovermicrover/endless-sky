@@ -40,34 +40,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 using namespace std;
 
 namespace {
-	// Pick a random commodity that would make sense to be exported from the
-	// first system to the second.
-	const Trade::Commodity *PickCommodity(const System &from, const System &to)
-	{
-		vector<int> weight;
-		int total = 0;
-		for(const Trade::Commodity &commodity : GameData::Commodities())
-		{
-			// For every 100 credits in profit you can make, double the chance
-			// of this commodity being chosen.
-			double profit = to.Trade(commodity.name) - from.Trade(commodity.name);
-			int w = max<int>(1, 100. * pow(2., profit * .01));
-			weight.push_back(w);
-			total += w;
-		}
-		total += !total;
-		// Pick a random commodity based on those weights.
-		int r = Random::Int(total);
-		for(unsigned i = 0; i < weight.size(); ++i)
-		{
-			r -= weight[i];
-			if(r < 0)
-				return &GameData::Commodities()[i];
-		}
-		// Control will never reach here, but to satisfy the compiler:
-		return nullptr;
-	}
-
 	// If a source, destination, waypoint, or stopover supplies more than one explicit choice
 	// or a mixture of explicit choice and location filter, print a warning.
 	void ParseMixedSpecificity(const DataNode &node, string &&kind, int expected)
@@ -165,30 +137,15 @@ void Mission::Load(const DataNode &node)
 		{
 			if(child.Token(1) == "outfit" && child.Size() >= 4)
 			{
-				requestedOutfit = child.Token(2);
-				outfitUnits = child.Value(3);
-				if(child.Size() >= 5)
-					outfitLimit = child.Value(4);
-				if(child.Size() >= 6)
-					outfitProb = child.Value(5);
+				outfitObjective.Load(child, 1);
 			}
 			else if(child.Token(1) == "outfitter" && child.Size() >= 4)
 			{
-				requestedOutfitter = child.Token(2);
-				outfitUnits = child.Value(3);
-				if(child.Size() >= 5)
-					outfitLimit = child.Value(4);
-				if(child.Size() >= 6)
-					outfitProb = child.Value(5);
+				outfitterObjective.Load(child, 1);
 			}
 			else if(child.Token(1) != "outfit" && child.Token(1) != "outfitter")
 			{
-				cargo = child.Token(1);
-				cargoSize = child.Value(2);
-				if(child.Size() >= 4)
-					cargoLimit = child.Value(3);
-				if(child.Size() >= 5)
-					cargoProb = child.Value(4);
+				cargoObjective.Load(child, 0);
 			}
 
 			for(const DataNode &grand : child)
@@ -334,7 +291,7 @@ void Mission::Load(const DataNode &node)
 		displayName = name;
 	if(hasPriority && location == LANDING)
 		node.PrintTrace("Warning: \"priority\" tag has no effect on \"landing\" missions:");
-	if(!requestedOutfit.empty() && !requestedOutfitter.empty())
+	if(outfitObjective.CanBeRealized() && outfitterObjective.CanBeRealized())
 		node.PrintTrace(string("Warning: both outfit and outfitter being defined is not supported,")
 			+ " and will cause both to use the probabilities defined last:");
 }
@@ -1271,56 +1228,22 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 
 	// If cargo is being carried, see if we are supposed to replace a generic
 	// cargo name with something more specific.
-	if(!cargo.empty())
+	if(cargoObjective.CanBeRealized())
 	{
-		const Trade::Commodity *commodity = nullptr;
-		if(cargo == "random")
-			commodity = PickCommodity(*sourceSystem, *result.destination->GetSystem());
-		else
-		{
-			for(const Trade::Commodity &option : GameData::Commodities())
-				if(option.name == cargo)
-				{
-					commodity = &option;
-					break;
-				}
-			for(const Trade::Commodity &option : GameData::SpecialCommodities())
-				if(option.name == cargo)
-				{
-					commodity = &option;
-					break;
-				}
-		}
-		if(commodity)
-			result.cargo = commodity->items[Random::Int(commodity->items.size())];
-		else
-			result.cargo = cargo;
+		result.cargo = cargoObjective.RealizeCargo(*sourceSystem, *result.destination->GetSystem());
+		result.cargoSize = cargoObjective.RealizeCount();
 	}
 	// If outfit is needed, see if we are supposed to replace a generic
-	if(!requestedOutfit.empty())
-		result.outfit = GameData::Outfits().Get(requestedOutfit);
-	// If outfitter is present and exists select a random outfit from it
-	if(!requestedOutfitter.empty() && GameData::Outfitters().Has(requestedOutfitter))
-		result.outfit = GameData::Outfitters().Get(requestedOutfitter)->Sample();
-	// Pick a random cargo amount, if requested.
-	if(cargoSize || cargoLimit)
+	if(outfitObjective.CanBeRealized())
 	{
-		if(cargoProb)
-			result.cargoSize = Random::Polya(cargoLimit, cargoProb) + cargoSize;
-		else if(cargoLimit > cargoSize)
-			result.cargoSize = cargoSize + Random::Int(cargoLimit - cargoSize + 1);
-		else
-			result.cargoSize = cargoSize;
+		result.outfit = outfitObjective.RealizeOutfit();
+		result.outfitUnits = outfitObjective.RealizeCount();
 	}
-	// Pick a random outfit amount, if requested.
-	if(outfitUnits || outfitLimit)
+	// If outfitter is present and exists select a random outfit from it
+	if(outfitterObjective.CanBeRealized())
 	{
-		if(outfitProb)
-			result.outfitUnits = Random::Polya(outfitLimit, outfitProb) + outfitUnits;
-		else if(outfitLimit > outfitUnits)
-			result.outfitUnits = outfitUnits + Random::Int(outfitLimit - outfitUnits + 1);
-		else
-			result.outfitUnits = outfitUnits;
+		result.outfit = outfitterObjective.RealizeOutfit();
+		result.outfitUnits = outfitterObjective.RealizeCount();
 	}
 	// Pick a random passenger count, if requested.
 	if(passengers || passengerLimit)
