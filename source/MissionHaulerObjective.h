@@ -21,6 +21,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 class MissionHaulerObjective {
 	// Construct and Load() at the same time.
+	MissionHaulerObjective() = default;
 	MissionHaulerObjective(const DataNode &node, const int offset);
 	void Load(const DataNode &node, const int offset);
 	bool CanBeRealized() const;
