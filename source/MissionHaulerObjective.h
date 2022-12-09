@@ -27,9 +27,9 @@ class MissionHaulerObjective {
 	int RealizeCount() const;
 
 	std::string id;
-    int count = 0;
-    int limit = 0;
-    double probability = 0.;
+	int count = 0;
+	int limit = 0;
+	double probability = 0.;
 };
 
 class MissionCargoObjective : MissionHaulerObjective {
