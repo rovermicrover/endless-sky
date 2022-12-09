@@ -72,9 +72,10 @@ const Type *Set<Type>::Find(const std::string &name) const
 template <class Type>
 const Type *Set<Type>::Sample() const
 {
-	auto it = data.begin();
-	std::advance(it, Random::Int(data.size()));
-	return (it == data.end() ? nullptr : &it->second);
+	if(this->size() == 0)
+		return nullptr;
+
+	return &(std::next(this->begin(), Random::Int(this->size()))->second);
 }
 
 

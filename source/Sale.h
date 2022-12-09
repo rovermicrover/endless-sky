@@ -79,9 +79,10 @@ bool Sale<Item>::Has(const Item *item) const
 template <class Item>
 const Item *Sale<Item>::Sample() const
 {
-	auto it = this->begin();
-	std::advance(it, Random::Int(this->size()));
-	return (it == this->end() ? nullptr : *it);
+	if(this->size() == 0)
+		return nullptr;
+
+	return *std::next(this->begin(), Random::Int(this->size()));
 }
 
 #endif
