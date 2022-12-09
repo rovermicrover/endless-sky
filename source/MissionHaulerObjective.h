@@ -37,6 +37,7 @@ protected:
 
 class MissionCargoObjective : public MissionHaulerObjective {
 public:
+	MissionCargoObjective() = default;
 	MissionCargoObjective(const DataNode &node, const int offset);
 	std::string RealizeCargo(const System &from, const System &to) const;
 private:
@@ -45,6 +46,7 @@ private:
 
 class MissionOutfitObjective : public MissionHaulerObjective {
 public:
+	MissionOutfitObjective() = default;
 	MissionOutfitObjective(const DataNode &node, const int offset);
 	bool CanBeRealized() const;
 	const Outfit *RealizeOutfit() const;
@@ -52,6 +54,7 @@ public:
 
 class MissionOutfitterObjective : public MissionHaulerObjective {
 public:
+	MissionOutfitterObjective() = default;
 	MissionOutfitterObjective(const DataNode &node, const int offset);
 	bool CanBeRealized() const;
 	const Outfit *RealizeOutfit() const;
