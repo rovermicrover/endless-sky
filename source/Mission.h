@@ -216,15 +216,15 @@ private:
 	bool hasFullClearance = true;
 
 	int repeat = 1;
-	MissionCargoObjective cargoObjective;
+	MissionCargoObjective *cargoObjective = nullptr;
 	std::string cargo;
 	int cargoSize = 0;
 	int illegalCargoFine = 0;
 	std::string illegalCargoMessage;
 	bool failIfDiscovered = false;
 	// Parameters for generating random outfit amounts:
-	MissionOutfitObjective outfitObjective;
-	MissionOutfitterObjective outfitterObjective;
+	MissionOutfitObjective *outfitObjective = nullptr;
+	MissionOutfitterObjective *outfitterObjective = nullptr;
 	const Outfit *outfit = nullptr;
 	int outfitUnits = 0;
 	int passengers = 0;

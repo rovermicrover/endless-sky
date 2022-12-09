@@ -165,15 +165,15 @@ void Mission::Load(const DataNode &node)
 		{
 			if(child.Token(1) == "outfit" && child.Size() >= 4)
 			{
-				outfitObjective = MissionOutfitObjective(child, 1);
+				outfitObjective = &MissionOutfitObjective(child, 1);
 			}
 			else if(child.Token(1) == "outfitter" && child.Size() >= 4)
 			{
-				outfitterObjective = MissionOutfitterObjective(child, 1);
+				outfitterObjective = &MissionOutfitterObjective(child, 1);
 			}
 			else if(child.Token(1) != "outfit" && child.Token(1) != "outfitter")
 			{
-				cargo = MissionCargoObjective(child, 0);
+				cargo = &MissionCargoObjective(child, 0);
 			}
 
 			for(const DataNode &grand : child)
@@ -1252,22 +1252,22 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 
 	// If cargo is being carried, see if we are supposed to replace a generic
 	// cargo name with something more specific.
-	if(cargoObjective && cargoObjective.CanBeRealized())
+	if(cargoObjective && cargoObjective->CanBeRealized())
 	{
-		result.cargo = cargoObjective.RealizedCargo(*sourceSystem, *result.destination->GetSystem());
-		result.cargoSize = cargoObjective.RealizeCount();
+		result.cargo = cargoObjective->RealizedCargo(*sourceSystem, *result.destination->GetSystem());
+		result.cargoSize = cargoObjective->RealizeCount();
 	}
 	// If outfit is needed, see if we are supposed to replace a generic
-	if(outfitObjective && outfitObjective.CanBeRealized())
+	if(outfitObjective && outfitObjective->CanBeRealized())
 	{
-		result.outfit = outfitObjective.RealizedOutfit();
-		result.outfitUnits = outfitObjective.RealizeCount();
+		result.outfit = outfitObjective->RealizedOutfit();
+		result.outfitUnits = outfitObjective->RealizeCount();
 	}
 	// If outfitter is present and exists select a random outfit from it
-	if(outfitterObjective && outfitterObjective.CanBeRealized())
+	if(outfitterObjective && outfitterObjective->CanBeRealized())
 	{
-		result.outfit = outfitterObjective.RealizedOutfit();
-		result.outfitUnits = outfitterObjective.RealizeCount();
+		result.outfit = outfitterObjective->RealizedOutfit();
+		result.outfitUnits = outfitterObjective->RealizeCount();
 	}
 	// Pick a random passenger count, if requested.
 	if(passengers || passengerLimit)

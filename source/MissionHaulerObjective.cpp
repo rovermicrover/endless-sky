@@ -120,11 +120,11 @@ Outfit MissionOutfitterObjective::RealizeOutfit() const
 
 bool MissionOutfitObjective::CanBeRealized() const
 {
-	return super() && GameData::Outfits().Has(id);
+	return MissionHaulerObjective::CanBeRealized() && GameData::Outfits().Has(id);
 }
 
 
 bool MissionOutfitterObjective::CanBeRealized() const
 {
-	return super() && GameData::Outfitters().Has(id);
+	return MissionHaulerObjective::CanBeRealized() && GameData::Outfitters().Has(id);
 }
