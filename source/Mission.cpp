@@ -165,15 +165,15 @@ void Mission::Load(const DataNode &node)
 		{
 			if(child.Token(1) == "outfit" && child.Size() >= 4)
 			{
-				outfitObjective = &MissionOutfitObjective(child, 1);
+				outfitObjective = new MissionOutfitObjective(child, 1);
 			}
 			else if(child.Token(1) == "outfitter" && child.Size() >= 4)
 			{
-				outfitterObjective = &MissionOutfitterObjective(child, 1);
+				outfitterObjective = new MissionOutfitterObjective(child, 1);
 			}
 			else if(child.Token(1) != "outfit" && child.Token(1) != "outfitter")
 			{
-				cargo = &MissionCargoObjective(child, 0);
+				cargo = new MissionCargoObjective(child, 0);
 			}
 
 			for(const DataNode &grand : child)
