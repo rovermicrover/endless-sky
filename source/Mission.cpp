@@ -137,15 +137,15 @@ void Mission::Load(const DataNode &node)
 		{
 			if(child.Token(1) == "outfit" && child.Size() >= 4)
 			{
-				outfitObjective = new MissionOutfitObjective(child, 1);
+				outfitObjective.Load(child, 1);
 			}
 			else if(child.Token(1) == "outfitter" && child.Size() >= 4)
 			{
-				outfitterObjective = new MissionOutfitterObjective(child, 1);
+				outfitterObjective.Load(child, 1);
 			}
 			else if(child.Token(1) != "outfit" && child.Token(1) != "outfitter")
 			{
-				cargoObjective = new MissionCargoObjective(child, 0);
+				cargoObjective.Load(child, 0);
 			}
 
 			for(const DataNode &grand : child)
@@ -291,7 +291,7 @@ void Mission::Load(const DataNode &node)
 		displayName = name;
 	if(hasPriority && location == LANDING)
 		node.PrintTrace("Warning: \"priority\" tag has no effect on \"landing\" missions:");
-	if(outfitObjective && outfitterObjective)
+	if(outfitObjective.CanBeRealized() && outfitterObjective.CanBeRealized())
 		node.PrintTrace(string("Warning: both outfit and outfitter being defined is not supported,")
 			+ " and will cause both to use the probabilities defined last:");
 }
@@ -1228,22 +1228,22 @@ Mission Mission::Instantiate(const PlayerInfo &player, const shared_ptr<Ship> &b
 
 	// If cargo is being carried, see if we are supposed to replace a generic
 	// cargo name with something more specific.
-	if(cargoObjective && cargoObjective->CanBeRealized())
+	if(cargoObjective && cargoObjective.CanBeRealized())
 	{
-		result.cargo = cargoObjective->RealizeCargo(*sourceSystem, *result.destination->GetSystem());
-		result.cargoSize = cargoObjective->RealizeCount();
+		result.cargo = cargoObjective.RealizeCargo(*sourceSystem, *result.destination->GetSystem());
+		result.cargoSize = cargoObjective.RealizeCount();
 	}
 	// If outfit is needed, see if we are supposed to replace a generic
-	if(outfitObjective && outfitObjective->CanBeRealized())
+	if(outfitObjective && outfitObjective.CanBeRealized())
 	{
-		result.outfit = outfitObjective->RealizeOutfit();
-		result.outfitUnits = outfitObjective->RealizeCount();
+		result.outfit = outfitObjective.RealizeOutfit();
+		result.outfitUnits = outfitObjective.RealizeCount();
 	}
 	// If outfitter is present and exists select a random outfit from it
-	if(outfitterObjective && outfitterObjective->CanBeRealized())
+	if(outfitterObjective && outfitterObjective.CanBeRealized())
 	{
-		result.outfit = outfitterObjective->RealizeOutfit();
-		result.outfitUnits = outfitterObjective->RealizeCount();
+		result.outfit = outfitterObjective.RealizeOutfit();
+		result.outfitUnits = outfitterObjective.RealizeCount();
 	}
 	// Pick a random passenger count, if requested.
 	if(passengers || passengerLimit)
