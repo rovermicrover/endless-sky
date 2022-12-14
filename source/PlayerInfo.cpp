@@ -2546,7 +2546,8 @@ set<string> &PlayerInfo::Collapsed(const string &name)
 void PlayerInfo::HandleIncurredDestroyEvent(const std::shared_ptr<Ship> &ship)
 {
 	incurredShipLosses++;
-	incurredCrewCasualties += ship ? ship->Crew() : 0;
+	int deaths = ship ? ship->Crew() : 0;
+	HandleIncurredCrewCasualties(deaths);
 }
 
 
@@ -2560,6 +2561,7 @@ void PlayerInfo::HandleInflectedDestroyEvent(const std::shared_ptr<Ship> &ship)
 void PlayerInfo::HandleIncurredCrewCasualties(int deaths)
 {
 	incurredCrewCasualties += deaths;
+	accounts.AddCrewLifeInsuranceCounter(deaths);
 }
 
 
