@@ -346,7 +346,7 @@ void Account::AddFine(int64_t amount)
 
 
 
-void AddCrewLifeInsuranceCounter(int64_t deaths)
+void Account::AddCrewLifeInsuranceCounter(int64_t deaths)
 {
 	// The Max could be configurable
 	crewLifeInsuranceCounter = min(crewLifeInsuranceCounter + deaths, 1000);
@@ -354,7 +354,7 @@ void AddCrewLifeInsuranceCounter(int64_t deaths)
 
 
 
-void DecayCrewLifeInsuranceCounter()
+void Account::DecayCrewLifeInsuranceCounter()
 {
 	// The decay could be configurable
 	crewLifeInsuranceCounter = floor(crewLifeInsuranceCounter * 0.95);
@@ -362,7 +362,7 @@ void DecayCrewLifeInsuranceCounter()
 
 
 
-double CrewLifeInsuranceCounterMultiplier() const
+double Account::CrewLifeInsuranceCounterMultiplier() const
 {
 	// The denominator could be configurable
 	return max(crewLifeInsuranceCounter / 100., 1.);
@@ -370,9 +370,9 @@ double CrewLifeInsuranceCounterMultiplier() const
 
 
 
-int64_t CalculateCrewLifeInsuranceCost(int64_t salaries) const
+int64_t Account::CalculateCrewLifeInsuranceCost(int64_t salaries) const
 {
-	return salaries * (CrewLifeInsuranceCounterMultiplier - 1)
+	return salaries * (CrewLifeInsuranceCounterMultiplier() - 1);
 }
 
 
