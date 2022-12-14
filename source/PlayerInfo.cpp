@@ -2543,7 +2543,7 @@ set<string> &PlayerInfo::Collapsed(const string &name)
 
 
 
-void HandleIncurredDestroyEvent(const std::shared_ptr<Ship> &ship)
+void PlayerInfo::HandleIncurredDestroyEvent(const std::shared_ptr<Ship> &ship)
 {
 	incurredShipLosses++;
 	incurredCrewCasualties += ship ? ship->Crew() : 0;
@@ -2551,13 +2551,13 @@ void HandleIncurredDestroyEvent(const std::shared_ptr<Ship> &ship)
 
 
 
-void HandleInflectedDestroyEvent(const std::shared_ptr<Ship> &ship)
+void PlayerInfo::HandleInflectedDestroyEvent(const std::shared_ptr<Ship> &ship)
 {
 	inflictedShipLosses++;
 	inflictedCrewCasualties += ship ? ship->Crew() : 0;
 }
 
-void HandleIncurredCrewCasualties(int deaths)
+void PlayerInfo::HandleIncurredCrewCasualties(int deaths)
 {
 	incurredCrewCasualties += deaths;
 }
