@@ -350,9 +350,7 @@ bool BoardingPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command,
 					player.HandleIncurredCrewCasualties(-1);
 				}
 				else
-				{
 					victim->AddCrew(-1);
-				}
 			}
 
 			// Report how many casualties each side suffered.
