@@ -347,7 +347,7 @@ void Account::AddFine(int64_t amount)
 
 
 
-void Account::AddCrewLifeInsuranceCounter(int64_t deaths)
+void Account::AddCrewLifeInsuranceCounter(int deaths)
 {
 	// The Max could be configurable
 	crewLifeInsuranceCounter = min(crewLifeInsuranceCounter + deaths, 1000);
