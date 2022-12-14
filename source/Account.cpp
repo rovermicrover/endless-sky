@@ -20,6 +20,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "text/Format.h"
 
 #include <algorithm>
+#include <cmath>
 #include <sstream>
 
 using namespace std;
@@ -362,7 +363,7 @@ void Account::DecayCrewLifeInsuranceCounter()
 
 
 
-double Account::CrewLifeInsuranceCounterMultiplier() const
+double Account::CrewLifeInsuranceSalariesMultiplier() const
 {
 	// The denominator could be configurable
 	return max(crewLifeInsuranceCounter / 100., 1.);
@@ -372,7 +373,7 @@ double Account::CrewLifeInsuranceCounterMultiplier() const
 
 int64_t Account::CalculateCrewLifeInsuranceCost(int64_t salaries) const
 {
-	return salaries * (CrewLifeInsuranceCounterMultiplier() - 1);
+	return salaries * (CrewLifeInsuranceSalariesMultiplier() - 1);
 }
 
 
