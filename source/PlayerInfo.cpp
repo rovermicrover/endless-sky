@@ -345,6 +345,14 @@ void PlayerInfo::Load(const string &path)
 		}
 		else if(child.Token(0) == "start")
 			startData.Load(child);
+		else if(child.Token(0) == "incurred crew casualties" && child.Size() >= 2)
+			incurredCrewCasualties = child.Value(1);
+		else if(child.Token(0) == "incurred ship losses" && child.Size() >= 2)
+			incurredShipLosses = child.Value(1);
+		else if(child.Token(0) == "inflicted crew casualties" && child.Size() >= 2)
+			inflictedCrewCasualties = child.Value(1);
+		else if(child.Token(0) == "inflicted ship losses" && child.Size() >= 2)
+			inflictedShipLosses = child.Value(1);
 	}
 	// Modify the game data with any changes that were loaded from this file.
 	ApplyChanges();
@@ -2535,6 +2543,29 @@ set<string> &PlayerInfo::Collapsed(const string &name)
 
 
 
+void PlayerInfo::HandleIncurredDestroyEvent(const std::shared_ptr<Ship> &ship)
+{
+	incurredShipLosses++;
+	int deaths = ship ? ship->Crew() : 0;
+	HandleIncurredCrewCasualties(deaths);
+}
+
+
+
+void PlayerInfo::HandleInflectedDestroyEvent(const std::shared_ptr<Ship> &ship)
+{
+	inflictedShipLosses++;
+	inflictedCrewCasualties += ship ? ship->Crew() : 0;
+}
+
+void PlayerInfo::HandleIncurredCrewCasualties(int deaths)
+{
+	incurredCrewCasualties += deaths;
+	accounts.AddCrewLifeInsuranceCounter(deaths);
+}
+
+
+
 // Apply any "changes" saved in this player info to the global game state.
 void PlayerInfo::ApplyChanges()
 {
@@ -3841,6 +3872,11 @@ void PlayerInfo::Save(const string &path) const
 	out.Write();
 	out.WriteComment("How you began:");
 	startData.Save(out);
+
+	out.Write("incurred crew casualties", incurredCrewCasualties);
+	out.Write("incurred ship losses", incurredShipLosses);
+	out.Write("inflicted crew casualties", inflictedCrewCasualties);
+	out.Write("inflicted ship losses", inflictedShipLosses);
 
 	// Write plugins to player's save file for debugging.
 	if(!GameData::PluginAboutText().empty())

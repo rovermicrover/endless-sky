@@ -20,6 +20,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "text/Format.h"
 
 #include <algorithm>
+#include <cmath>
 #include <sstream>
 
 using namespace std;
@@ -40,6 +41,7 @@ void Account::Load(const DataNode &node, bool clearFirst)
 		credits = 0;
 		salariesOwed = 0;
 		maintenanceDue = 0;
+		crewLifeInsuranceOwed = 0;
 		creditScore = 400;
 		mortgages.clear();
 		history.clear();
@@ -53,6 +55,8 @@ void Account::Load(const DataNode &node, bool clearFirst)
 			salariesOwed = child.Value(1);
 		else if(child.Token(0) == "maintenance" && child.Size() >= 2)
 			maintenanceDue = child.Value(1);
+		else if(child.Token(0) == "crew life insurance")
+			crewLifeInsuranceOwed = child.Value(1);
 		else if(child.Token(0) == "score" && child.Size() >= 2)
 			creditScore = child.Value(1);
 		else if(child.Token(0) == "mortgage")
@@ -60,6 +64,8 @@ void Account::Load(const DataNode &node, bool clearFirst)
 		else if(child.Token(0) == "history")
 			for(const DataNode &grand : child)
 				history.push_back(grand.Value(0));
+		else if(child.Token(0) == "crew life insurance counter")
+			crewLifeInsuranceCounter = child.Value(1);
 	}
 }
 
@@ -76,6 +82,8 @@ void Account::Save(DataWriter &out) const
 			out.Write("salaries", salariesOwed);
 		if(maintenanceDue)
 			out.Write("maintenance", maintenanceDue);
+		if(crewLifeInsuranceOwed)
+			out.Write("crew life insurance", crewLifeInsuranceOwed);
 		out.Write("score", creditScore);
 
 		out.Write("history");
@@ -88,6 +96,8 @@ void Account::Save(DataWriter &out) const
 
 		for(const Mortgage &mortgage : mortgages)
 			mortgage.Save(out);
+
+		out.Write("crew life insurance counter", crewLifeInsuranceCounter);
 	}
 	out.EndChild();
 }
@@ -136,6 +146,7 @@ string Account::Step(int64_t assets, int64_t salaries, int64_t maintenance)
 
 	// Keep track of what payments were made and whether any could not be made.
 	salariesOwed += salaries;
+	crewLifeInsuranceOwed += CalculateCrewLifeInsurance(salaries);
 	maintenanceDue += maintenance;
 	bool missedPayment = false;
 
@@ -157,6 +168,27 @@ string Account::Step(int64_t assets, int64_t salaries, int64_t maintenance)
 		{
 			credits -= salariesOwed;
 			salariesOwed = 0;
+		}
+	}
+
+	// Next is crew life insurance.
+	int64_t crewLifeInsurancePaid = crewLifeInsuranceOwed;
+	if(crewLifeInsuranceOwed)
+	{
+		if(crewLifeInsuranceOwed > credits)
+		{
+			// If you can't pay the full salary amount, still pay some of it and
+			// remember how much back wages you owe to your crew.
+			crewLifeInsurancePaid = max<int64_t>(credits, 0);
+			crewLifeInsuranceOwed -= crewLifeInsurancePaid;
+			credits -= crewLifeInsurancePaid;
+			missedPayment = true;
+			out << "You could not pay all your crew life insurance salaries.";
+		}
+		else
+		{
+			credits -= crewLifeInsuranceOwed;
+			crewLifeInsuranceOwed = 0;
 		}
 	}
 
@@ -220,7 +252,7 @@ string Account::Step(int64_t assets, int64_t salaries, int64_t maintenance)
 	// Keep track of your net worth over the last HISTORY days.
 	if(history.size() > HISTORY)
 		history.erase(history.begin());
-	history.push_back(credits + assets - salariesOwed - maintenanceDue);
+	history.push_back(credits + assets - salariesOwed - crewLifeInsuranceOwed - maintenanceDue);
 
 	// If you failed to pay any debt, your credit score drops. Otherwise, even
 	// if you have no debts, it increases. (Because, having no debts at all
@@ -228,7 +260,7 @@ string Account::Step(int64_t assets, int64_t salaries, int64_t maintenance)
 	creditScore = max(200, min(800, creditScore + (missedPayment ? -5 : 1)));
 
 	// If you didn't make any payments, no need to continue further.
-	if(!(salariesPaid + maintenancePaid + mortgagesPaid + finesPaid))
+	if(!(salariesPaid + crewLifeInsurancePaid + maintenancePaid + mortgagesPaid + finesPaid))
 		return out.str();
 	else if(missedPayment)
 		out << " ";
@@ -243,6 +275,8 @@ string Account::Step(int64_t assets, int64_t salaries, int64_t maintenance)
 	map<string, int64_t> typesPaid;
 	if(salariesPaid)
 		typesPaid["crew salaries"] = salariesPaid;
+	if(crewLifeInsurancePaid)
+		typesPaid["crew life insurance"] = crewLifeInsurancePaid;
 	if(maintenancePaid)
 		typesPaid["maintenance"] = maintenancePaid;
 	if(mortgagesPaid)
@@ -266,6 +300,9 @@ string Account::Step(int64_t assets, int64_t salaries, int64_t maintenance)
 	{
 		if(salariesPaid)
 			out << creditString(salariesPaid) << " in crew salaries"
+				<< ((crewLifeInsurancePaid || mortgagesPaid || finesPaid || maintenancePaid) ? " and " : ".");
+		if(crewLifeInsurancePaid)
+			out << creditString(crewLifeInsurancePaid) << " in crew life insurance"
 				<< ((mortgagesPaid || finesPaid || maintenancePaid) ? " and " : ".");
 		if(maintenancePaid)
 			out << creditString(maintenancePaid) << "  in maintenance"
@@ -276,6 +313,9 @@ string Account::Step(int64_t assets, int64_t salaries, int64_t maintenance)
 		if(finesPaid)
 			out << creditString(finesPaid) << " in fines.";
 	}
+
+	DecayCrewLifeInsuranceCounter();
+
 	return out.str();
 }
 
@@ -335,6 +375,52 @@ void Account::AddMortgage(int64_t principal)
 void Account::AddFine(int64_t amount)
 {
 	mortgages.emplace_back(amount, 0, 60);
+}
+
+
+int64_t Account::CrewLifeInsuranceOwed() const
+{
+	return crewLifeInsuranceOwed;
+}
+
+
+
+void Account::PayCrewLifeInsurance(int64_t amount)
+{
+	amount = min(min(amount, crewLifeInsuranceOwed), credits);
+	credits -= amount;
+	crewLifeInsuranceOwed -= amount;
+}
+
+
+
+void Account::AddCrewLifeInsuranceCounter(int deaths)
+{
+	// The Max could be configurable
+	crewLifeInsuranceCounter = min(crewLifeInsuranceCounter + deaths, 1000);
+}
+
+
+
+void Account::DecayCrewLifeInsuranceCounter()
+{
+	// The decay could be configurable
+	crewLifeInsuranceCounter = floor(crewLifeInsuranceCounter * 0.95);
+}
+
+
+
+double Account::CrewLifeInsuranceSalariesMultiplier() const
+{
+	// The denominator could be configurable
+	return max(crewLifeInsuranceCounter / 100., 1.);
+}
+
+
+
+int64_t Account::CalculateCrewLifeInsurance(int64_t salaries) const
+{
+	return salaries * (CrewLifeInsuranceSalariesMultiplier() - 1);
 }
 
 
