@@ -291,7 +291,7 @@ public:
 	void SetMapZoom(int level);
 	// Get the set of collapsed categories for the named panel.
 	std::set<std::string> &Collapsed(const std::string &name);
-	void HandleIncurredDestroyEvent(const std::shared_ptr<Ship> &ship);
+w	void HandleIncurredDestroyEvent(const std::shared_ptr<Ship> &ship);
 	void HandleInflectedDestroyEvent(const std::shared_ptr<Ship> &ship);
 	void HandleIncurredCrewCasualties(int deaths);
 
