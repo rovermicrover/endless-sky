@@ -57,7 +57,7 @@ public:
 	void AddCrewLifeInsuranceCounter(int deaths);
 	void DecayCrewLifeInsuranceCounter();
 	double CrewLifeInsuranceSalariesMultiplier() const;
-	int64_t CalculateCrewLifeInsuranceCost(int64_t salaries) const;
+	int64_t CalculateCrewLifeInsurance(int64_t salaries) const;
 	int64_t Prequalify() const;
 	// Assets:
 	int64_t NetWorth() const;
@@ -78,6 +78,7 @@ private:
 	// than being ignored.
 	int64_t salariesOwed = 0;
 	int64_t maintenanceDue = 0;
+	int64_t crewLifeInsuranceOwed = 0;
 	// Your credit score determines the interest rate on your mortgages.
 	int creditScore = 400;
 	int crewLifeInsuranceCounter = 0;
