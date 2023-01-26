@@ -89,8 +89,12 @@ public:
 	bool HasShipyard() const;
 	// Get the list of ships in the shipyard.
 	const Sale<Ship> &Shipyard() const;
+	// Get the shipyard description
+	std::string ShipyardDescription() const;
 	// Check if this planet has an outfitter.
 	bool HasOutfitter() const;
+	// Get the outfitter description
+	std::string OutfitterDescription() const;
 	// Get the list of outfits available from the outfitter.
 	const Sale<Outfit> &Outfitter() const;
 
@@ -147,6 +151,8 @@ private:
 	std::string name;
 	std::string description;
 	std::string spaceport;
+	std::string shipyardDescription;
+	std::string outfitterDescription;
 	const Sprite *landscape = nullptr;
 	std::string music;
 

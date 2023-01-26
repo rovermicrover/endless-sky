@@ -109,8 +109,10 @@ void OutfitterPanel::Step()
 	ShopPanel::Step();
 	ShopPanel::CheckForMissions(Mission::OUTFITTER);
 	if(GetUI()->IsTop(this) && !checkedHelp)
-		if(!DoHelp("outfitter") && !DoHelp("outfitter 2") && !DoHelp("outfitter 3"))
-			// All help messages have now been displayed.
+		// Use short-circuiting to only display one of them at a time.
+		// (The first valid condition encountered will make us skip the others.)
+		if(DoHelp("outfitter") || DoHelp("cargo management") || DoHelp("uninstalling and storage") || true)
+			// Either a help message was freshly displayed, or all of them have already been seen.
 			checkedHelp = true;
 }
 
@@ -261,18 +263,19 @@ int OutfitterPanel::DetailWidth() const
 
 int OutfitterPanel::DrawDetails(const Point &center)
 {
-	string selectedItem = "Nothing Selected";
+	const string selectedItem = selectedOutfit ? selectedOutfit->DisplayName() : "Nothing Selected";
 	const Font &font = FontSet::Get(14);
-	const Color &bright = *GameData::Colors().Get("bright");
 	const Color &dim = *GameData::Colors().Get("medium");
 	const Sprite *collapsedArrow = SpriteSet::Get("ui/collapsed");
 
-	int heightOffset = 20;
+	int heightOffset = 0;
+	// Draw this string representing the selected item (if any), centered in the details side panel
+	Point selectedPoint(center.X() - .5 * INFOBAR_WIDTH, center.Y() + heightOffset);
+	heightOffset += DrawDetailSelected(selectedItem, selectedPoint);
 
 	if(selectedOutfit)
 	{
 		outfitInfo.Update(*selectedOutfit, player, CanSell());
-		selectedItem = selectedOutfit->DisplayName();
 
 		const Sprite *thumbnail = selectedOutfit->Thumbnail();
 		const Sprite *background = SpriteSet::Get("ui/outfitter selected");
@@ -281,9 +284,8 @@ int OutfitterPanel::DrawDetails(const Point &center)
 			? max(thumbnail->Height(), static_cast<float>(TileSize()))
 			: static_cast<float>(TileSize());
 
-		Point thumbnailCenter(center.X(), center.Y() + 20 + tileSize / 2);
-
-		Point startPoint(center.X() - INFOBAR_WIDTH / 2 + 20, center.Y() + 20 + tileSize);
+		Point thumbnailCenter(center.X(), center.Y() + heightOffset + tileSize / 2);
+		Point startPoint(center.X() - INFOBAR_WIDTH / 2 + 20, center.Y() + heightOffset + tileSize);
 
 		double descriptionOffset = 35.;
 		Point descCenter(Screen::Right() - SIDE_WIDTH + INFOBAR_WIDTH / 2, startPoint.Y() + 20.);
@@ -329,11 +331,12 @@ int OutfitterPanel::DrawDetails(const Point &center)
 
 		heightOffset = reqsPoint.Y() + outfitInfo.RequirementsHeight();
 	}
-
-	// Draw this string representing the selected item (if any), centered in the details side panel
-	Point selectedPoint(center.X() - .5 * INFOBAR_WIDTH, center.Y());
-	font.Draw({selectedItem, {INFOBAR_WIDTH - 20, Alignment::CENTER, Truncate::MIDDLE}},
-		selectedPoint, bright);
+	else if(planet && !planet->OutfitterDescription().empty())
+	{
+		heightOffset += 5;
+		Point descriptionPoint(center.X() - INFOBAR_WIDTH / 2 + 25, center.Y() + heightOffset);
+		heightOffset += DrawDetailDescription(planet->OutfitterDescription(), descriptionPoint);
+	}
 
 	return heightOffset;
 }
@@ -370,7 +373,7 @@ bool OutfitterPanel::CanBuy(bool checkAlreadyOwned) const
 	if(!playerShip)
 	{
 		double mass = selectedOutfit->Mass();
-		return (!mass || player.Cargo().Free() >= mass);
+		return (!mass || player.Cargo().FreePrecise() >= mass);
 	}
 
 	for(const Ship *ship : playerShips)

@@ -156,18 +156,19 @@ int ShipyardPanel::DetailWidth() const
 
 int ShipyardPanel::DrawDetails(const Point &center)
 {
-	string selectedItem = "No Ship Selected";
+	const string selectedItem = selectedShip ? selectedShip->ModelName() : "No Ship Selected";
 	const Font &font = FontSet::Get(14);
-	const Color &bright = *GameData::Colors().Get("bright");
 	const Color &dim = *GameData::Colors().Get("medium");
 	const Sprite *collapsedArrow = SpriteSet::Get("ui/collapsed");
 
-	int heightOffset = 20;
+	int heightOffset = 0;
+	// Draw this string representing the selected ship (if any), centered in the details side panel
+	Point selectedPoint(center.X() - INFOBAR_WIDTH / 2, center.Y() + heightOffset);
+	heightOffset += DrawDetailSelected(selectedItem, selectedPoint);
 
 	if(selectedShip)
 	{
 		shipInfo.Update(*selectedShip, player.StockDepreciation(), player.GetDate().DaysSinceEpoch());
-		selectedItem = selectedShip->ModelName();
 
 		const Sprite *background = SpriteSet::Get("ui/shipyard selected");
 		const Sprite *shipSprite = selectedShip->GetSprite();
@@ -178,8 +179,8 @@ int ShipyardPanel::DrawDetails(const Point &center)
 		int swizzle = selectedShip->CustomSwizzle() >= 0
 			? selectedShip->CustomSwizzle() : GameData::PlayerGovernment()->GetSwizzle();
 
-		Point spriteCenter(center.X(), center.Y() + 20 + TileSize() / 2);
-		Point startPoint(center.X() - INFOBAR_WIDTH / 2 + 20, center.Y() + 20 + TileSize());
+		Point spriteCenter(center.X(), center.Y() + heightOffset + TileSize() / 2);
+		Point startPoint(center.X() - INFOBAR_WIDTH / 2 + 20, center.Y() + heightOffset + TileSize());
 
 		double descriptionOffset = 35.;
 		Point descCenter(Screen::Right() - SIDE_WIDTH + INFOBAR_WIDTH / 2, startPoint.Y() + 20.);
@@ -225,11 +226,12 @@ int ShipyardPanel::DrawDetails(const Point &center)
 
 		heightOffset = outfPoint.Y() + shipInfo.OutfitsHeight();
 	}
-
-	// Draw this string representing the selected ship (if any), centered in the details side panel
-	Point selectedPoint(center.X() - INFOBAR_WIDTH / 2, center.Y());
-	font.Draw({selectedItem, {INFOBAR_WIDTH - 20, Alignment::CENTER, Truncate::MIDDLE}},
-		selectedPoint, bright);
+	else if(planet && !planet->ShipyardDescription().empty())
+	{
+		heightOffset += 5;
+		Point descriptionPoint(center.X() - INFOBAR_WIDTH / 2 + 25, center.Y() + heightOffset);
+		heightOffset += DrawDetailDescription(planet->ShipyardDescription(), descriptionPoint);
+	}
 
 	return heightOffset;
 }

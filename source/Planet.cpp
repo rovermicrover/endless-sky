@@ -105,10 +105,14 @@ void Planet::Load(const DataNode &node, Set<Wormhole> &wormholes)
 				description.clear();
 			else if(key == "spaceport")
 				spaceport.clear();
-			else if(key == "shipyard")
+			else if(key == "shipyard" && value != "description")
 				shipSales.clear();
-			else if(key == "outfitter")
+			else if(key == "shipyard" && value == "description")
+				shipyardDescription.clear();
+			else if(key == "outfitter" && value != "description")
 				outfitSales.clear();
+			else if(key == "outfitter" && value == "description")
+				outfitterDescription.clear();
 			else if(key == "government")
 				government = nullptr;
 			else if(key == "required reputation")
@@ -146,17 +150,37 @@ void Planet::Load(const DataNode &node, Set<Wormhole> &wormholes)
 		}
 		else if(key == "shipyard")
 		{
-			if(remove)
-				shipSales.erase(GameData::Shipyards().Get(value));
+			if(value == "description")
+			{
+				if(remove)
+					shipyardDescription = "";
+				else if(child.Size() > (valueIndex + 1))
+					shipyardDescription += child.Token(valueIndex + 1) + '\n';
+			}
 			else
-				shipSales.insert(GameData::Shipyards().Get(value));
+			{
+				if(remove)
+					shipSales.erase(GameData::Shipyards().Get(value));
+				else
+					shipSales.insert(GameData::Shipyards().Get(value));
+			}
 		}
 		else if(key == "outfitter")
 		{
-			if(remove)
-				outfitSales.erase(GameData::Outfitters().Get(value));
+			if(value == "description")
+			{
+				if(remove)
+					outfitterDescription = "";
+				else if(child.Size() > (valueIndex + 1))
+					outfitterDescription += child.Token(valueIndex + 1) + '\n';
+			}
 			else
-				outfitSales.insert(GameData::Outfitters().Get(value));
+			{
+				if(remove)
+					outfitSales.erase(GameData::Outfitters().Get(value));
+				else
+					outfitSales.insert(GameData::Outfitters().Get(value));
+			}
 		}
 		// Handle the attributes which cannot be "removed."
 		else if(remove)
@@ -388,6 +412,22 @@ const Sale<Ship> &Planet::Shipyard() const
 
 
 
+// Get the shipyard description
+string Planet::ShipyardDescription() const
+{
+	if(!shipyardDescription.empty())
+		return shipyardDescription;
+
+	string shipyardDescriptionFromSales;
+
+	for(const Sale<Ship> *sale : shipSales)
+		shipyardDescriptionFromSales += sale->GetDescription();
+
+	return shipyardDescriptionFromSales;
+}
+
+
+
 // Check if this planet has an outfitter.
 bool Planet::HasOutfitter() const
 {
@@ -404,6 +444,22 @@ const Sale<Outfit> &Planet::Outfitter() const
 		outfitter.Add(*sale);
 
 	return outfitter;
+}
+
+
+
+// Get the outfitter description
+string Planet::OutfitterDescription() const
+{
+	if(!outfitterDescription.empty())
+		return outfitterDescription;
+
+	string outfitterDescriptionFromSales;
+
+	for(const Sale<Outfit> *sale : outfitSales)
+		outfitterDescriptionFromSales += sale->GetDescription();
+
+	return outfitterDescriptionFromSales;
 }
 
 
@@ -510,6 +566,9 @@ const Wormhole *Planet::GetWormhole() const
 // land on this planet.
 bool Planet::IsAccessible(const Ship *ship) const
 {
+	// If this is a wormhole that leads to an inaccessible system, no ship can land here.
+	if(wormhole && ship && ship->GetSystem() && wormhole->WormholeDestination(*ship->GetSystem()).Inaccessible())
+		return false;
 	// If there are no required attributes, then any ship may land here.
 	if(IsUnrestricted())
 		return true;

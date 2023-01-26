@@ -23,6 +23,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "OutfitInfoDisplay.h"
 #include "Point.h"
 #include "ShipInfoDisplay.h"
+#include "text/WrappedText.h"
 
 #include <map>
 #include <set>
@@ -52,6 +53,8 @@ protected:
 	void DrawMain();
 
 	void DrawShip(const Ship &ship, const Point &center, bool isSelected);
+	int DrawDetailSelected(const std::string &selectedText, const Point &center);
+	int DrawDetailDescription(const std::string &descriptionText, const Point &center);
 
 	void CheckForMissions(Mission::Location location);
 
@@ -122,6 +125,7 @@ protected:
 
 
 protected:
+	WrappedText description;
 	PlayerInfo &player;
 	// Remember the current day, for calculating depreciation.
 	int day;
