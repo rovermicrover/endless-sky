@@ -376,3 +376,21 @@ outfit "Heavy Ion Fragment"
 		"hit force" 3
 		"shield damage" 1.79
 		"hull damage" 1.47
+
+outfit "Hand Held Shard Fabricator"
+	category "Hand to Hand"
+	cost 200000
+	thumbnail "outfit/shard"
+	"capture attack" 4.0
+	"capture defense" 0.0
+	"mass" 5
+	"outfit space" -5
+	"weapon capacity" -5
+	"operating costs" 150
+	"ramscoop" -0.01
+	"unplunderable" 1
+	description `A replica of the "Hand Held" version of the Sheragi Shard Fabricator, slightly scaled down for existing races. For use as a first strick shock weapon in boarding operations. In order to produce ammo it must be hooked into your ships weapon and fuel system so it takes up weapon capacity. Also because of its size and support equipment it takes up a significate space, and it is also so unwieldy using it as a defensive weapon is dangerous for fear of miss fire and destroying your own ship.`
+
+outfitter "Hai Shard Fabricator"
+	"Shard Fabricator"
+	"Hand Held Shard Fabricator"
